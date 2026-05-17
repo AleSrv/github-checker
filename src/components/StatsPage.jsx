@@ -1,4 +1,4 @@
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
 import {
   BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer,
   PieChart, Pie, Cell, Legend
@@ -12,6 +12,8 @@ const SEV_COLORS = {
   medium: '#fdd663',
   low: '#81c995',
 }
+
+const NPM_LANGS = new Set(['JavaScript', 'TypeScript'])
 
 function CustomTooltip({ active, payload, label }) {
   if (!active || !payload?.length) return null
@@ -37,16 +39,19 @@ function PieTooltip({ active, payload }) {
   )
 }
 
-function HistoryEntry({ entry }) {
+function HistoryEntry({ entry, type }) {
   const date = new Date(entry.timestamp)
   const formatted = date.toLocaleDateString('es-ES', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' })
+  const isMigrate = type === 'migrate'
 
   return (
     <div className="flex items-center justify-between gap-4 py-3 border-b border-white/5 last:border-0">
       <div className="flex items-center gap-3 min-w-0">
         <div className="w-8 h-8 rounded-xl flex items-center justify-center flex-shrink-0"
-          style={{ background: 'rgba(129,201,149,0.15)' }}>
-          <span className="material-symbols-outlined text-[#81c995] text-sm">build_circle</span>
+          style={{ background: isMigrate ? 'rgba(221,183,255,0.15)' : 'rgba(129,201,149,0.15)' }}>
+          <span className="material-symbols-outlined text-sm" style={{ color: isMigrate ? '#ddb7ff' : '#81c995' }}>
+            {isMigrate ? 'package_2' : 'build_circle'}
+          </span>
         </div>
         <div className="min-w-0">
           <p className="text-sm font-semibold text-[#e4e1ed] truncate">{entry.repo}</p>
@@ -54,10 +59,12 @@ function HistoryEntry({ entry }) {
         </div>
       </div>
       <div className="flex items-center gap-3 flex-shrink-0">
-        <span className="text-xs px-2 py-0.5 rounded-full"
-          style={{ background: 'rgba(255,183,131,0.15)', color: '#ffb783' }}>
-          {entry.vulns} vulns
-        </span>
+        {!isMigrate && entry.vulns !== undefined && (
+          <span className="text-xs px-2 py-0.5 rounded-full"
+            style={{ background: 'rgba(255,183,131,0.15)', color: '#ffb783' }}>
+            {entry.vulns} vulns
+          </span>
+        )}
         {entry.workflowUrl && (
           <a href={entry.workflowUrl} target="_blank" rel="noopener noreferrer"
             className="text-[#908fa0] hover:text-[#c0c1ff] transition-colors">
@@ -83,10 +90,8 @@ function renderCustomLabel({ cx, cy, midAngle, innerRadius, outerRadius, percent
   )
 }
 
-export default function StatsPage() {
-  const scanResults = useStore(s => s.scanResults)
-  const fixHistory = useStore(s => s.fixHistory)
-
+// ── Security stats ───────────────────────────────────────────────────────────
+function SecurityStats({ scanResults, fixHistory }) {
   const stats = useMemo(() => {
     if (!scanResults || scanResults.length === 0) return null
 
@@ -132,186 +137,321 @@ export default function StatsPage() {
     return { severityData, topRepos, topPackages, severityCounts, total }
   }, [scanResults])
 
+  if (!scanResults) {
+    return (
+      <div className="text-center py-20">
+        <span className="material-symbols-outlined text-[#464554] text-6xl block mb-4">bar_chart</span>
+        <p className="text-[#908fa0] mb-4">Primero ejecuta un escaneo desde el Dashboard</p>
+        <a href="/dashboard" className="text-sm text-[#c0c1ff] hover:underline">Ir al Dashboard →</a>
+      </div>
+    )
+  }
+
+  if (!stats) {
+    return (
+      <div className="text-center py-20">
+        <span className="material-symbols-outlined text-[#81c995] text-6xl block mb-4">verified</span>
+        <p className="text-[#908fa0]">¡No se encontraron vulnerabilidades!</p>
+      </div>
+    )
+  }
+
+  return (
+    <div className="space-y-8">
+      {/* Summary pills */}
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+        {Object.entries(stats.severityCounts).map(([sev, count]) => {
+          const cfg = SEV_CONFIG[sev]
+          return (
+            <div key={sev} className="glass rounded-[1.5rem] p-5 text-center">
+              <div className="text-4xl font-black mb-1" style={{ color: cfg.color, fontFamily: 'Space Grotesk' }}>
+                {count}
+              </div>
+              <div className="text-xs uppercase tracking-widest font-semibold" style={{ color: cfg.color }}>
+                {cfg.label}
+              </div>
+            </div>
+          )
+        })}
+      </div>
+
+      {/* Charts row */}
+      <div className="grid lg:grid-cols-2 gap-6">
+        <div className="glass rounded-[1.5rem] p-6">
+          <h2 className="text-xs font-semibold text-[#908fa0] uppercase tracking-widest mb-1">
+            Distribución por severidad
+          </h2>
+          <p className="text-[#464554] text-xs mb-4">{stats.total} vulnerabilidades totales</p>
+          <div style={{ width: '100%', height: 260 }}>
+            <ResponsiveContainer width="100%" height="100%">
+              <PieChart>
+                <Pie
+                  data={stats.severityData}
+                  cx="50%"
+                  cy="45%"
+                  innerRadius="38%"
+                  outerRadius="62%"
+                  paddingAngle={2}
+                  dataKey="value"
+                  labelLine={false}
+                  label={renderCustomLabel}
+                >
+                  {stats.severityData.map((entry, i) => (
+                    <Cell key={i} fill={entry.color} stroke="rgba(0,0,0,0.3)" strokeWidth={1} />
+                  ))}
+                </Pie>
+                <Tooltip content={<PieTooltip />} />
+                <Legend
+                  iconType="circle"
+                  iconSize={8}
+                  formatter={(value, entry) => (
+                    <span style={{ color: '#c7c4d7', fontSize: 12 }}>
+                      {value} <span style={{ color: entry.color, fontWeight: 700 }}>{entry.payload.value}</span>
+                    </span>
+                  )}
+                />
+              </PieChart>
+            </ResponsiveContainer>
+          </div>
+        </div>
+
+        <div className="glass rounded-[1.5rem] p-6">
+          <h2 className="text-xs font-semibold text-[#908fa0] uppercase tracking-widest mb-1">
+            Repos más vulnerables
+          </h2>
+          <p className="text-[#464554] text-xs mb-4">{stats.topRepos.length} repos con alertas abiertas</p>
+          <div style={{ width: '100%', height: 260 }}>
+            <ResponsiveContainer width="100%" height="100%">
+              <BarChart
+                data={stats.topRepos}
+                layout="vertical"
+                margin={{ top: 0, right: 30, left: 0, bottom: 0 }}
+              >
+                <XAxis type="number" tick={{ fill: '#908fa0', fontSize: 10 }} axisLine={false} tickLine={false} />
+                <YAxis dataKey="name" type="category" width={115} tick={{ fill: '#c7c4d7', fontSize: 10 }} axisLine={false} tickLine={false} />
+                <Tooltip content={<CustomTooltip />} cursor={{ fill: 'rgba(255,255,255,0.04)' }} />
+                <Bar dataKey="Vulnerabilidades" radius={[0, 6, 6, 0]} maxBarSize={16}>
+                  {stats.topRepos.map((entry, i) => (
+                    <Cell key={i} fill={`rgba(192,193,255,${Math.max(0.4, 1 - i * 0.07)})`} />
+                  ))}
+                </Bar>
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
+        </div>
+      </div>
+
+      {/* Top packages table */}
+      <div className="glass rounded-[1.5rem] p-6">
+        <h2 className="text-xs font-semibold text-[#908fa0] uppercase tracking-widest mb-6 flex items-center gap-2">
+          <span className="material-symbols-outlined filled text-[#ffb783] text-base">workspace_premium</span>
+          Top 10 paquetes más problemáticos
+        </h2>
+        <div className="overflow-x-auto">
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="text-left border-b border-white/8">
+                <th className="pb-3 pr-3 text-[#464554] text-xs uppercase tracking-wide font-medium w-6">#</th>
+                <th className="pb-3 pr-3 text-[#464554] text-xs uppercase tracking-wide font-medium">Paquete</th>
+                <th className="pb-3 pr-3 text-[#464554] text-xs uppercase tracking-wide font-medium">Repos</th>
+                <th className="pb-3 pr-3 text-[#464554] text-xs uppercase tracking-wide font-medium">Alertas</th>
+                <th className="pb-3 text-[#464554] text-xs uppercase tracking-wide font-medium">Severidad</th>
+              </tr>
+            </thead>
+            <tbody>
+              {stats.topPackages.map((pkg, i) => {
+                const cfg = SEV_CONFIG[pkg.severity] || SEV_CONFIG.unknown
+                const barWidth = Math.max(8, (pkg.repos / stats.topPackages[0].repos) * 80)
+                return (
+                  <tr key={pkg.package} className="border-b border-white/4 last:border-0">
+                    <td className="py-3 pr-3 text-[#464554] text-xs font-mono">{i + 1}</td>
+                    <td className="py-3 pr-3">
+                      <span className="font-mono text-[#e4e1ed] text-sm">{pkg.package}</span>
+                    </td>
+                    <td className="py-3 pr-3">
+                      <div className="flex items-center gap-2">
+                        <div className="h-1.5 rounded-full" style={{ width: barWidth, background: 'rgba(192,193,255,0.5)' }} />
+                        <span className="text-[#c7c4d7] text-xs">{pkg.repos}</span>
+                      </div>
+                    </td>
+                    <td className="py-3 pr-3 text-[#c7c4d7] text-xs">{pkg.alerts}</td>
+                    <td className="py-3">
+                      <span className="px-2 py-0.5 rounded-full text-xs font-semibold"
+                        style={{ background: cfg.bg, color: cfg.color }}>
+                        {cfg.label}
+                      </span>
+                    </td>
+                  </tr>
+                )
+              })}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      {/* Fix history */}
+      <div className="glass rounded-[1.5rem] p-6">
+        <h2 className="text-xs font-semibold text-[#908fa0] uppercase tracking-widest mb-4 flex items-center gap-2">
+          <span className="material-symbols-outlined text-[#c0c1ff] text-base">history</span>
+          Historial de correcciones de seguridad
+        </h2>
+        {fixHistory.length === 0 ? (
+          <div className="text-center py-8">
+            <span className="material-symbols-outlined text-[#464554] text-4xl block mb-2">history</span>
+            <p className="text-sm text-[#464554]">Aún no has lanzado ninguna corrección</p>
+          </div>
+        ) : (
+          <div>{fixHistory.map((entry, i) => <HistoryEntry key={i} entry={entry} type="fix" />)}</div>
+        )}
+      </div>
+    </div>
+  )
+}
+
+// ── pnpm migration stats ─────────────────────────────────────────────────────
+function MigrateStats({ allRepos, allReposLoaded, migrateHistory }) {
+  const npmRepos = useMemo(
+    () => allRepos.filter(r => NPM_LANGS.has(r.language)),
+    [allRepos]
+  )
+
+  const migratedSet = useMemo(
+    () => new Set(migrateHistory.map(e => e.repo)),
+    [migrateHistory]
+  )
+
+  const pending = npmRepos.filter(r => !migratedSet.has(r.name)).length
+  const migrated = migrateHistory.length
+
+  const topReposData = useMemo(() => {
+    if (npmRepos.length === 0) return []
+    const byLang = {}
+    for (const r of npmRepos) {
+      byLang[r.language] = (byLang[r.language] || 0) + 1
+    }
+    return Object.entries(byLang).map(([name, count]) => ({ name, Repos: count }))
+      .sort((a, b) => b.Repos - a.Repos)
+  }, [npmRepos])
+
+  if (!allReposLoaded && migrateHistory.length === 0) {
+    return (
+      <div className="text-center py-20">
+        <span className="material-symbols-outlined text-[#464554] text-6xl block mb-4">package_2</span>
+        <p className="text-[#908fa0] mb-4">Carga los repositorios desde la pestaña "Migrar a pnpm" del Dashboard para ver estadísticas</p>
+        <a href="/dashboard" className="text-sm text-[#ddb7ff] hover:underline">Ir al Dashboard →</a>
+      </div>
+    )
+  }
+
+  return (
+    <div className="space-y-8">
+      {/* Summary cards */}
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <div className="glass rounded-[1.5rem] p-5 text-center">
+          <div className="text-4xl font-black mb-1" style={{ color: '#ddb7ff', fontFamily: 'Space Grotesk' }}>
+            {allReposLoaded ? npmRepos.length : '—'}
+          </div>
+          <div className="text-xs uppercase tracking-widest font-semibold text-[#ddb7ff]">Repos JS/TS</div>
+        </div>
+        <div className="glass rounded-[1.5rem] p-5 text-center">
+          <div className="text-4xl font-black mb-1" style={{ color: '#81c995', fontFamily: 'Space Grotesk' }}>
+            {migrated}
+          </div>
+          <div className="text-xs uppercase tracking-widest font-semibold text-[#81c995]">Migraciones lanzadas</div>
+        </div>
+        <div className="glass rounded-[1.5rem] p-5 text-center">
+          <div className="text-4xl font-black mb-1" style={{ color: '#fdd663', fontFamily: 'Space Grotesk' }}>
+            {allReposLoaded ? pending : '—'}
+          </div>
+          <div className="text-xs uppercase tracking-widest font-semibold text-[#fdd663]">Pendientes</div>
+        </div>
+      </div>
+
+      {/* Language breakdown chart */}
+      {allReposLoaded && topReposData.length > 0 && (
+        <div className="glass rounded-[1.5rem] p-6">
+          <h2 className="text-xs font-semibold text-[#908fa0] uppercase tracking-widest mb-1">
+            Repos JS/TS por lenguaje
+          </h2>
+          <p className="text-[#464554] text-xs mb-4">{npmRepos.length} repos candidatos a migración</p>
+          <div style={{ width: '100%', height: 180 }}>
+            <ResponsiveContainer width="100%" height="100%">
+              <BarChart data={topReposData} margin={{ top: 0, right: 20, left: 0, bottom: 0 }}>
+                <XAxis dataKey="name" tick={{ fill: '#c7c4d7', fontSize: 12 }} axisLine={false} tickLine={false} />
+                <YAxis tick={{ fill: '#908fa0', fontSize: 10 }} axisLine={false} tickLine={false} />
+                <Tooltip content={<CustomTooltip />} cursor={{ fill: 'rgba(255,255,255,0.04)' }} />
+                <Bar dataKey="Repos" radius={[6, 6, 0, 0]} maxBarSize={60}>
+                  <Cell fill="rgba(221,183,255,0.7)" />
+                  <Cell fill="rgba(192,193,255,0.7)" />
+                </Bar>
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
+        </div>
+      )}
+
+      {/* Migrate history */}
+      <div className="glass rounded-[1.5rem] p-6">
+        <h2 className="text-xs font-semibold text-[#908fa0] uppercase tracking-widest mb-4 flex items-center gap-2">
+          <span className="material-symbols-outlined text-[#ddb7ff] text-base">history</span>
+          Historial de migraciones a pnpm
+        </h2>
+        {migrateHistory.length === 0 ? (
+          <div className="text-center py-8">
+            <span className="material-symbols-outlined text-[#464554] text-4xl block mb-2">package_2</span>
+            <p className="text-sm text-[#464554]">Aún no has lanzado ninguna migración</p>
+          </div>
+        ) : (
+          <div>{migrateHistory.map((entry, i) => <HistoryEntry key={i} entry={entry} type="migrate" />)}</div>
+        )}
+      </div>
+    </div>
+  )
+}
+
+// ── Main StatsPage ───────────────────────────────────────────────────────────
+export default function StatsPage() {
+  const scanResults = useStore(s => s.scanResults)
+  const fixHistory = useStore(s => s.fixHistory)
+  const allRepos = useStore(s => s.allRepos)
+  const allReposLoaded = useStore(s => s.allReposLoaded)
+  const migrateHistory = useStore(s => s.migrateHistory)
+
+  const [mode, setMode] = useState('security')
+
+  const TABS = [
+    { id: 'security', label: 'Seguridad', icon: 'shield' },
+    { id: 'migrate', label: 'Migración a pnpm', icon: 'package_2' },
+  ]
+
   return (
     <main className="flex-1 w-full px-6 py-8" style={{ maxWidth: '1400px', marginLeft: 'auto', marginRight: 'auto' }}>
-      <h1 className="text-2xl font-bold text-[#e4e1ed] mb-8">Estadísticas</h1>
+      <div className="flex items-center justify-between mb-8 flex-wrap gap-4">
+        <h1 className="text-2xl font-bold text-[#e4e1ed]">Estadísticas</h1>
 
-      {!scanResults && (
-        <div className="text-center py-20">
-          <span className="material-symbols-outlined text-[#464554] text-6xl block mb-4">bar_chart</span>
-          <p className="text-[#908fa0] mb-4">Primero ejecuta un escaneo desde el Dashboard</p>
-          <a href="/dashboard" className="text-sm text-[#c0c1ff] hover:underline">Ir al Dashboard →</a>
+        {/* Mode toggle */}
+        <div className="flex gap-1 p-1 rounded-xl" style={{ background: 'rgba(0,0,0,0.3)' }}>
+          {TABS.map(tab => (
+            <button
+              key={tab.id}
+              onClick={() => setMode(tab.id)}
+              className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-200"
+              style={mode === tab.id
+                ? { background: 'rgba(192,193,255,0.15)', color: tab.id === 'migrate' ? '#ddb7ff' : '#c0c1ff', border: '1px solid rgba(192,193,255,0.3)' }
+                : { background: 'transparent', color: '#908fa0', border: '1px solid transparent' }
+              }
+            >
+              <span className="material-symbols-outlined text-base">{tab.icon}</span>
+              {tab.label}
+            </button>
+          ))}
         </div>
-      )}
+      </div>
 
-      {stats && (
-        <div className="space-y-8">
-
-          {/* Summary pills */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-            {Object.entries(stats.severityCounts).map(([sev, count]) => {
-              const cfg = SEV_CONFIG[sev]
-              return (
-                <div key={sev} className="glass rounded-[1.5rem] p-5 text-center">
-                  <div className="text-4xl font-black mb-1" style={{ color: cfg.color, fontFamily: 'Space Grotesk' }}>
-                    {count}
-                  </div>
-                  <div className="text-xs uppercase tracking-widest font-semibold" style={{ color: cfg.color }}>
-                    {cfg.label}
-                  </div>
-                </div>
-              )
-            })}
-          </div>
-
-          {/* Charts row */}
-          <div className="grid lg:grid-cols-2 gap-6">
-
-            {/* Donut chart */}
-            <div className="glass rounded-[1.5rem] p-6">
-              <h2 className="text-xs font-semibold text-[#908fa0] uppercase tracking-widest mb-1">
-                Distribución por severidad
-              </h2>
-              <p className="text-[#464554] text-xs mb-4">{stats.total} vulnerabilidades totales</p>
-              <div style={{ width: '100%', height: 260 }}>
-                <ResponsiveContainer width="100%" height="100%">
-                  <PieChart>
-                    <Pie
-                      data={stats.severityData}
-                      cx="50%"
-                      cy="45%"
-                      innerRadius="38%"
-                      outerRadius="62%"
-                      paddingAngle={2}
-                      dataKey="value"
-                      labelLine={false}
-                      label={renderCustomLabel}
-                    >
-                      {stats.severityData.map((entry, i) => (
-                        <Cell key={i} fill={entry.color} stroke="rgba(0,0,0,0.3)" strokeWidth={1} />
-                      ))}
-                    </Pie>
-                    <Tooltip content={<PieTooltip />} />
-                    <Legend
-                      iconType="circle"
-                      iconSize={8}
-                      formatter={(value, entry) => (
-                        <span style={{ color: '#c7c4d7', fontSize: 12 }}>
-                          {value} <span style={{ color: entry.color, fontWeight: 700 }}>{entry.payload.value}</span>
-                        </span>
-                      )}
-                    />
-                  </PieChart>
-                </ResponsiveContainer>
-              </div>
-            </div>
-
-            {/* Bar chart */}
-            <div className="glass rounded-[1.5rem] p-6">
-              <h2 className="text-xs font-semibold text-[#908fa0] uppercase tracking-widest mb-1">
-                Repos más vulnerables
-              </h2>
-              <p className="text-[#464554] text-xs mb-4">{stats.topRepos.length} repos con alertas abiertas</p>
-              <div style={{ width: '100%', height: 260 }}>
-                <ResponsiveContainer width="100%" height="100%">
-                  <BarChart
-                    data={stats.topRepos}
-                    layout="vertical"
-                    margin={{ top: 0, right: 30, left: 0, bottom: 0 }}
-                  >
-                    <XAxis
-                      type="number"
-                      tick={{ fill: '#908fa0', fontSize: 10 }}
-                      axisLine={false}
-                      tickLine={false}
-                    />
-                    <YAxis
-                      dataKey="name"
-                      type="category"
-                      width={115}
-                      tick={{ fill: '#c7c4d7', fontSize: 10 }}
-                      axisLine={false}
-                      tickLine={false}
-                    />
-                    <Tooltip content={<CustomTooltip />} cursor={{ fill: 'rgba(255,255,255,0.04)' }} />
-                    <Bar dataKey="Vulnerabilidades" radius={[0, 6, 6, 0]} maxBarSize={16}>
-                      {stats.topRepos.map((entry, i) => {
-                        const opacity = Math.max(0.4, 1 - i * 0.07)
-                        return <Cell key={i} fill={`rgba(192,193,255,${opacity})`} />
-                      })}
-                    </Bar>
-                  </BarChart>
-                </ResponsiveContainer>
-              </div>
-            </div>
-          </div>
-
-          {/* Top packages table */}
-          <div className="glass rounded-[1.5rem] p-6">
-            <h2 className="text-xs font-semibold text-[#908fa0] uppercase tracking-widest mb-6 flex items-center gap-2">
-              <span className="material-symbols-outlined filled text-[#ffb783] text-base">workspace_premium</span>
-              Top 10 paquetes más problemáticos
-            </h2>
-            <div className="overflow-x-auto">
-              <table className="w-full text-sm">
-                <thead>
-                  <tr className="text-left border-b border-white/8">
-                    <th className="pb-3 pr-3 text-[#464554] text-xs uppercase tracking-wide font-medium w-6">#</th>
-                    <th className="pb-3 pr-3 text-[#464554] text-xs uppercase tracking-wide font-medium">Paquete</th>
-                    <th className="pb-3 pr-3 text-[#464554] text-xs uppercase tracking-wide font-medium">Repos</th>
-                    <th className="pb-3 pr-3 text-[#464554] text-xs uppercase tracking-wide font-medium">Alertas</th>
-                    <th className="pb-3 text-[#464554] text-xs uppercase tracking-wide font-medium">Severidad</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {stats.topPackages.map((pkg, i) => {
-                    const cfg = SEV_CONFIG[pkg.severity] || SEV_CONFIG.unknown
-                    const barWidth = Math.max(8, (pkg.repos / stats.topPackages[0].repos) * 80)
-                    return (
-                      <tr key={pkg.package} className="border-b border-white/4 last:border-0">
-                        <td className="py-3 pr-3 text-[#464554] text-xs font-mono">{i + 1}</td>
-                        <td className="py-3 pr-3">
-                          <span className="font-mono text-[#e4e1ed] text-sm">{pkg.package}</span>
-                        </td>
-                        <td className="py-3 pr-3">
-                          <div className="flex items-center gap-2">
-                            <div className="h-1.5 rounded-full" style={{ width: barWidth, background: 'rgba(192,193,255,0.5)' }} />
-                            <span className="text-[#c7c4d7] text-xs">{pkg.repos}</span>
-                          </div>
-                        </td>
-                        <td className="py-3 pr-3 text-[#c7c4d7] text-xs">{pkg.alerts}</td>
-                        <td className="py-3">
-                          <span className="px-2 py-0.5 rounded-full text-xs font-semibold"
-                            style={{ background: cfg.bg, color: cfg.color }}>
-                            {cfg.label}
-                          </span>
-                        </td>
-                      </tr>
-                    )
-                  })}
-                </tbody>
-              </table>
-            </div>
-          </div>
-
-          {/* Fix history */}
-          <div className="glass rounded-[1.5rem] p-6">
-            <h2 className="text-xs font-semibold text-[#908fa0] uppercase tracking-widest mb-4 flex items-center gap-2">
-              <span className="material-symbols-outlined text-[#c0c1ff] text-base">history</span>
-              Historial de correcciones
-            </h2>
-            {fixHistory.length === 0 ? (
-              <div className="text-center py-8">
-                <span className="material-symbols-outlined text-[#464554] text-4xl block mb-2">history</span>
-                <p className="text-sm text-[#464554]">Aún no has lanzado ninguna corrección</p>
-              </div>
-            ) : (
-              <div>{fixHistory.map((entry, i) => <HistoryEntry key={i} entry={entry} />)}</div>
-            )}
-          </div>
-
-        </div>
-      )}
+      {mode === 'security'
+        ? <SecurityStats scanResults={scanResults} fixHistory={fixHistory} />
+        : <MigrateStats allRepos={allRepos} allReposLoaded={allReposLoaded} migrateHistory={migrateHistory} />
+      }
     </main>
   )
 }
