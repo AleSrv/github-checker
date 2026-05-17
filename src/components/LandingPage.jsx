@@ -136,26 +136,20 @@ export default function LandingPage() {
           {STEPS.map((step) => (
             <div
               key={step.number}
-              className="glass rounded-[1.5rem] p-8 flex flex-col gap-4 transition-all duration-300 hover:-translate-y-1"
-              style={{ '--step-color': step.color }}
+              className="glass rounded-[1.5rem] p-8 flex flex-col items-center text-center gap-4 transition-all duration-300 hover:-translate-y-1 relative overflow-hidden"
             >
-              <div className="flex items-start justify-between">
-                <div
-                  className="w-14 h-14 rounded-2xl flex items-center justify-center"
-                  style={{ background: `${step.color}20` }}
-                >
-                  <span
-                    className="material-symbols-outlined text-3xl"
-                    style={{ color: step.color }}
-                  >
-                    {step.icon}
-                  </span>
-                </div>
-                <span
-                  className="text-5xl font-black opacity-15"
-                  style={{ color: step.color, fontFamily: 'Space Grotesk' }}
-                >
-                  {step.number}
+              <span
+                className="absolute top-3 right-4 text-5xl font-black opacity-10 select-none"
+                style={{ color: step.color, fontFamily: 'Space Grotesk' }}
+              >
+                {step.number}
+              </span>
+              <div
+                className="w-14 h-14 rounded-2xl flex items-center justify-center flex-shrink-0"
+                style={{ background: `${step.color}20` }}
+              >
+                <span className="material-symbols-outlined text-3xl" style={{ color: step.color }}>
+                  {step.icon}
                 </span>
               </div>
               <h3 className="text-xl font-bold text-[#e4e1ed]">{step.title}</h3>
