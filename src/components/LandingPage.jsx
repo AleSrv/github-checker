@@ -127,7 +127,7 @@ export default function LandingPage() {
 
       {/* ── HOW IT WORKS ───────────────────────────────────── */}
       <section className="w-full px-6" style={{ marginBottom: '8rem' }}>
-        <div className="max-w-6xl mx-auto">
+        <div style={{ maxWidth: '1400px', margin: '0 auto' }}>
           <div className="text-center mb-14">
             <h2 className="text-3xl font-bold text-[#e4e1ed] mb-3">¿Cómo funciona?</h2>
             <p className="text-[#908fa0]">Tres pasos. Sin configuración. Sin servidores propios.</p>
@@ -163,7 +163,7 @@ export default function LandingPage() {
 
       {/* ── FEATURES GRID ──────────────────────────────────── */}
       <section className="w-full px-6" style={{ marginBottom: '8rem' }}>
-        <div className="max-w-6xl mx-auto">
+        <div style={{ maxWidth: '1400px', margin: '0 auto' }}>
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold text-[#e4e1ed] mb-3">Todo lo que necesitas</h2>
           </div>
