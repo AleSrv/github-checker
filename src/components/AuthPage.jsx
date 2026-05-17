@@ -195,7 +195,7 @@ export default function AuthPage() {
           </div>
 
           {/* Token form */}
-          <form onSubmit={handleSubmit} className="glass rounded-[1.5rem] p-6 mt-8">
+          <form onSubmit={handleSubmit} className="glass rounded-[1.5rem] p-6 mt-14">
             <div className="flex items-center gap-2 mb-5">
               <span className="material-symbols-outlined text-[#c0c1ff] text-xl">key</span>
               <label className="text-base font-bold text-[#e4e1ed]">

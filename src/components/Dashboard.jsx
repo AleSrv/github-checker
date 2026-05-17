@@ -463,7 +463,7 @@ export default function Dashboard() {
 
       {/* ── SCAN PROGRESS ── */}
       {scanning && (
-        <div className="glass rounded-[1.5rem] p-6 mb-8">
+        <div className="glass rounded-[1.5rem] p-6 mt-6 mb-10">
           <div className="flex items-center justify-between mb-3 text-sm">
             <span className="text-[#c7c4d7]">Analizando alertas de Dependabot...</span>
             <span className="text-[#c0c1ff] font-semibold">{progressPct}%</span>

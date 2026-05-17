@@ -108,7 +108,7 @@ export default function LandingPage() {
 
       {/* ── STATS STRIP ────────────────────────────────────── */}
       <section className="w-full px-6" style={{ marginBottom: '8rem' }}>
-        <div className="max-w-4xl mx-auto grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <div style={{ maxWidth: '1400px', margin: '0 auto' }} className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           {[
             { value: '100%', label: 'En el navegador', icon: 'public' },
             { value: '0', label: 'Datos almacenados', icon: 'storage' },
