@@ -107,8 +107,8 @@ export default function LandingPage() {
       </section>
 
       {/* ── STATS STRIP ────────────────────────────────────── */}
-      <section className="max-w-4xl mx-auto px-6 mb-24">
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+      <section className="w-full px-6" style={{ marginBottom: '8rem' }}>
+        <div className="max-w-4xl mx-auto grid grid-cols-1 sm:grid-cols-3 gap-4">
           {[
             { value: '100%', label: 'En el navegador', icon: 'public' },
             { value: '0', label: 'Datos almacenados', icon: 'storage' },
@@ -126,59 +126,64 @@ export default function LandingPage() {
       </section>
 
       {/* ── HOW IT WORKS ───────────────────────────────────── */}
-      <section className="max-w-6xl mx-auto px-6 mb-24">
-        <div className="text-center mb-16">
-          <h2 className="text-3xl font-bold text-[#e4e1ed] mb-3">¿Cómo funciona?</h2>
-          <p className="text-[#908fa0]">Tres pasos. Sin configuración. Sin servidores propios.</p>
-        </div>
+      <section className="w-full px-6" style={{ marginBottom: '8rem' }}>
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-14">
+            <h2 className="text-3xl font-bold text-[#e4e1ed] mb-3">¿Cómo funciona?</h2>
+            <p className="text-[#908fa0]">Tres pasos. Sin configuración. Sin servidores propios.</p>
+          </div>
 
-        <div className="grid md:grid-cols-3 gap-6">
-          {STEPS.map((step) => (
-            <div
-              key={step.number}
-              className="glass rounded-[1.5rem] p-8 flex flex-col items-center text-center gap-4 transition-all duration-300 hover:-translate-y-1 relative overflow-hidden"
-            >
-              <span
-                className="absolute top-3 right-4 text-5xl font-black opacity-10 select-none"
-                style={{ color: step.color, fontFamily: 'Space Grotesk' }}
-              >
-                {step.number}
-              </span>
+          <div className="grid md:grid-cols-3 gap-6">
+            {STEPS.map((step) => (
               <div
-                className="w-14 h-14 rounded-2xl flex items-center justify-center flex-shrink-0"
-                style={{ background: `${step.color}20` }}
+                key={step.number}
+                className="glass rounded-[1.5rem] p-8 flex flex-col items-center text-center gap-5 transition-all duration-300 hover:-translate-y-1 relative overflow-hidden"
               >
-                <span className="material-symbols-outlined text-3xl" style={{ color: step.color }}>
-                  {step.icon}
+                <span
+                  className="absolute top-4 left-5 text-5xl font-black opacity-10 select-none"
+                  style={{ color: step.color, fontFamily: 'Space Grotesk' }}
+                >
+                  {step.number}
                 </span>
+                <div
+                  className="w-16 h-16 rounded-2xl flex items-center justify-center flex-shrink-0 mt-4"
+                  style={{ background: `${step.color}20` }}
+                >
+                  <span className="material-symbols-outlined text-3xl" style={{ color: step.color }}>
+                    {step.icon}
+                  </span>
+                </div>
+                <h3 className="text-xl font-bold text-[#e4e1ed]">{step.title}</h3>
+                <p className="text-[#c7c4d7] leading-relaxed text-sm">{step.desc}</p>
               </div>
-              <h3 className="text-xl font-bold text-[#e4e1ed]">{step.title}</h3>
-              <p className="text-[#c7c4d7] leading-relaxed text-sm">{step.desc}</p>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       </section>
 
       {/* ── FEATURES GRID ──────────────────────────────────── */}
-      <section className="max-w-6xl mx-auto px-6 mb-24">
-        <div className="text-center mb-12">
-          <h2 className="text-3xl font-bold text-[#e4e1ed] mb-3">Todo lo que necesitas</h2>
-        </div>
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {FEATURES.map(({ icon, text }) => (
-            <div key={text} className="glass rounded-[1rem] px-5 py-4 flex items-center gap-4">
-              <div className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0"
-                style={{ background: 'rgba(192,193,255,0.1)' }}>
-                <span className="material-symbols-outlined text-[#c0c1ff]">{icon}</span>
+      <section className="w-full px-6" style={{ marginBottom: '8rem' }}>
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold text-[#e4e1ed] mb-3">Todo lo que necesitas</h2>
+          </div>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {FEATURES.map(({ icon, text }) => (
+              <div key={text} className="glass rounded-[1rem] px-5 py-5 flex items-center gap-4">
+                <div className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0"
+                  style={{ background: 'rgba(192,193,255,0.1)' }}>
+                  <span className="material-symbols-outlined text-[#c0c1ff]">{icon}</span>
+                </div>
+                <span className="text-[#c7c4d7] text-sm">{text}</span>
               </div>
-              <span className="text-[#c7c4d7] text-sm">{text}</span>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       </section>
 
       {/* ── DISCLAIMER SECTION ─────────────────────────────── */}
-      <section className="max-w-4xl mx-auto px-6 mb-24">
+      <section className="w-full px-6" style={{ marginBottom: '8rem' }}>
+        <div className="max-w-4xl mx-auto">
         <div
           className="rounded-[1.5rem] p-8"
           style={{ background: 'rgba(255,183,131,0.05)', border: '1px solid rgba(255,183,131,0.2)' }}
@@ -215,10 +220,12 @@ export default function LandingPage() {
             </div>
           </div>
         </div>
+        </div>
       </section>
 
       {/* ── CTA FINAL ──────────────────────────────────────── */}
-      <section className="max-w-4xl mx-auto px-6 mb-24 text-center">
+      <section className="w-full px-6 text-center" style={{ marginBottom: '6rem' }}>
+        <div className="max-w-4xl mx-auto">
         <div
           className="rounded-[2rem] p-8 sm:p-12"
           style={{
@@ -242,6 +249,7 @@ export default function LandingPage() {
           >
             Empezar ahora
           </button>
+        </div>
         </div>
       </section>
 
