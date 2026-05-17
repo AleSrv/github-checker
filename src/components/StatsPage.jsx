@@ -133,7 +133,7 @@ export default function StatsPage() {
   }, [scanResults])
 
   return (
-    <main className="flex-1 max-w-6xl mx-auto w-full px-6 py-8">
+    <main className="flex-1 w-full px-6 py-8" style={{ maxWidth: '1400px', marginLeft: 'auto', marginRight: 'auto' }}>
       <h1 className="text-2xl font-bold text-[#e4e1ed] mb-8">Estadísticas</h1>
 
       {!scanResults && (
