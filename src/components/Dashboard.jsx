@@ -406,7 +406,7 @@ export default function Dashboard() {
   ]
 
   return (
-    <main className="flex-1 max-w-6xl mx-auto w-full px-6 py-8">
+    <main className="flex-1 w-full px-6 py-8" style={{ maxWidth: '1400px', marginLeft: 'auto', marginRight: 'auto' }}>
       {/* ── HEADER ── */}
       <div className="flex items-center justify-between mb-8 flex-wrap gap-4">
         <div>
