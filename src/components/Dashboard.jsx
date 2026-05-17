@@ -41,7 +41,7 @@ function SkeletonCard() {
 function SummaryCard({ icon, value, label, color, bg }) {
   return (
     <div
-      className="rounded-[1.5rem] p-4 relative overflow-hidden flex flex-col gap-3"
+      className="rounded-[1.5rem] p-5 relative overflow-hidden flex flex-col gap-4"
       style={{ background: 'rgba(31,31,39,0.5)', border: '1px solid rgba(255,255,255,0.07)', backdropFilter: 'blur(12px)' }}
     >
       {/* color accent bar */}
