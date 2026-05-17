@@ -450,7 +450,7 @@ export default function Dashboard() {
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
-              className="flex items-center gap-2 px-5 py-2.5 text-sm font-semibold transition-all duration-200 relative"
+              className="flex items-center gap-2 px-7 py-2.5 text-sm font-semibold transition-all duration-200 relative"
               style={{
                 color: active ? accentColor : '#464554',
                 background: active ? accentBg : 'transparent',
