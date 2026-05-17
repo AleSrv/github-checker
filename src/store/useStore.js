@@ -9,7 +9,10 @@ const useStore = create(
       user: null,
       setToken: (token) => set({ token }),
       setUser: (user) => set({ user }),
-      logout: () => set({ token: null, user: null, repos: [], scanResults: null, allRepos: [] }),
+      logout: () => set({
+        token: null, user: null, repos: [], scanResults: null,
+        allRepos: [], allReposLoaded: false,
+      }),
 
       // Scan
       repos: [],
@@ -21,9 +24,11 @@ const useStore = create(
       setScanning: (scanning) => set({ scanning }),
       setScanProgress: (progress) => set({ scanProgress: progress }),
 
-      // All repos (memory only — populated during scan)
+      // All repos — persists across tab switches, cleared on logout or manual reload
       allRepos: [],
-      setAllRepos: (repos) => set({ allRepos: repos }),
+      allReposLoaded: false,
+      setAllRepos: (repos) => set({ allRepos: repos, allReposLoaded: true }),
+      clearAllRepos: () => set({ allRepos: [], allReposLoaded: false }),
 
       // Filters
       filterSeverity: 'all',
