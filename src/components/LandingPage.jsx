@@ -58,7 +58,7 @@ export default function LandingPage() {
       </nav>
 
       {/* ── HERO ───────────────────────────────────────────── */}
-      <section className="max-w-6xl mx-auto px-6 pt-24 text-center" style={{ paddingBottom: '7rem' }}>
+      <section className="w-full px-6 pt-24 flex flex-col items-center text-center" style={{ paddingBottom: '7rem' }}>
         <div
           className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-semibold uppercase tracking-widest mb-8"
           style={{ background: 'rgba(192,193,255,0.1)', border: '1px solid rgba(192,193,255,0.3)', color: '#c0c1ff' }}
@@ -67,13 +67,13 @@ export default function LandingPage() {
           Herramienta gratuita · Open Source
         </div>
 
-        <h1 className="text-5xl md:text-6xl font-black leading-[1.1] tracking-tight mb-6">
+        <h1 className="text-5xl md:text-6xl font-black leading-[1.1] tracking-tight mb-6 max-w-4xl">
           Detecta y corrige{' '}
           <span className="accent-text">vulnerabilidades</span>
           <br />en tus repos de GitHub
         </h1>
 
-        <p className="text-lg text-[#c7c4d7] max-w-2xl mx-auto mb-12 leading-relaxed">
+        <p className="text-lg text-[#c7c4d7] max-w-2xl mb-12 leading-relaxed">
           Escanea todas tus alertas de Dependabot, analiza qué paquetes necesitan actualización
           y lanza correcciones automáticas con un solo clic. Sin instalar nada.
         </p>
