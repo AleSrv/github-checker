@@ -114,9 +114,9 @@ export default function LandingPage() {
             { value: '0', label: 'Datos almacenados', icon: 'storage' },
             { value: '∞', label: 'Repos soportados', icon: 'folder_open' },
           ].map(({ value, label, icon }) => (
-            <div key={label} className="glass rounded-[1.5rem] p-6 flex sm:flex-col items-center sm:text-center gap-4 sm:gap-0">
-              <span className="material-symbols-outlined text-[#c0c1ff] text-3xl sm:mb-2 block flex-shrink-0">{icon}</span>
-              <div className="flex-1 sm:flex-none">
+            <div key={label} className="glass rounded-[1.5rem] p-6 flex sm:flex-col items-center sm:items-center gap-4 sm:gap-2 sm:text-center">
+              <span className="material-symbols-outlined text-[#c0c1ff] text-3xl block flex-shrink-0">{icon}</span>
+              <div className="flex-1 sm:flex-none text-left sm:text-center">
                 <div className="text-3xl font-black text-[#e4e1ed] sm:mb-1">{value}</div>
                 <div className="text-xs text-[#908fa0] uppercase tracking-widest">{label}</div>
               </div>
