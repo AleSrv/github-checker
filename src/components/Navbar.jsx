@@ -22,7 +22,7 @@ export default function Navbar() {
       <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between gap-4">
         {/* Logo */}
         <button
-          onClick={() => navigate('/dashboard')}
+          onClick={() => navigate('/')}
           className="flex items-center gap-2 flex-shrink-0"
         >
           <span className="material-symbols-outlined filled text-[#c0c1ff] text-2xl">security</span>
