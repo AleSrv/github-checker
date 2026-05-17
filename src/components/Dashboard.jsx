@@ -255,11 +255,7 @@ export default function Dashboard() {
   const [scanError, setScanError] = useState('')
   const [selected, setSelected] = useState(new Set())
 
-  useEffect(() => {
-    if (!scanResults && !scanning) {
-      runScan()
-    }
-  }, [])
+  // No auto-scan — user chooses when to start
 
   function toggleSelect(repoName) {
     setSelected(prev => {
@@ -413,6 +409,30 @@ export default function Dashboard() {
       {scanning && !scanResults && activeTab === 'security' && (
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {Array.from({ length: 6 }).map((_, i) => <SkeletonCard key={i} />)}
+        </div>
+      )}
+
+      {/* ── SECURITY EMPTY STATE ── */}
+      {activeTab === 'security' && !scanResults && !scanning && !scanError && (
+        <div className="text-center py-20">
+          <div
+            className="w-24 h-24 rounded-[2rem] flex items-center justify-center mx-auto mb-6"
+            style={{ background: 'rgba(192,193,255,0.08)', border: '1px solid rgba(192,193,255,0.15)' }}
+          >
+            <span className="material-symbols-outlined text-[#c0c1ff] text-5xl">shield</span>
+          </div>
+          <h2 className="text-xl font-bold text-[#e4e1ed] mb-2">Escanea tus repositorios</h2>
+          <p className="text-sm text-[#908fa0] mb-8 max-w-sm mx-auto">
+            Analiza todas tus repos en busca de vulnerabilidades Dependabot y corrígelas con un clic.
+          </p>
+          <button
+            onClick={runScan}
+            className="flex items-center gap-2 px-6 py-3 rounded-[0.75rem] font-bold text-sm mx-auto transition-all duration-200 hover:-translate-y-0.5"
+            style={{ background: 'linear-gradient(135deg, #c0c1ff, #8083ff)', color: '#1000a9' }}
+          >
+            <span className="material-symbols-outlined text-xl">search</span>
+            Iniciar escaneo
+          </button>
         </div>
       )}
 
