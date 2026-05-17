@@ -441,7 +441,7 @@ export default function Dashboard() {
       </div>
 
       {/* ── TABS ── */}
-      <div className="flex items-end mb-10 gap-1" style={{ borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
+      <div className="flex items-end mb-10 gap-2" style={{ borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
         {TABS.map(tab => {
           const active = activeTab === tab.id
           const accentColor = tab.id === 'migrate' ? '#ddb7ff' : '#c0c1ff'
