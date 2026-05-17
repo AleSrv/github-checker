@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "PowerShell(Get-ChildItem \"C:\\\\Users\\\\corre\\\\GITHUB\\\\mi-proyecto-github-check\" | Where-Object { $_.Name -ne \"node_modules\" } | Select-Object Name, LastWriteTime)",
+      "Bash(gh repo *)",
+      "Bash(gh api *)",
+      "Bash(gh pr *)",
+      "Read(//c/Users/corre/GITHUB/mi-proyecto-github-check/repos-to-fix/partidazo/**)",
+      "Bash(pnpm approve-builds *)",
+      "Bash(git init *)",
+      "Bash(git add *)",
+      "Bash(git commit -m ' *)"
+    ]
+  }
+}
