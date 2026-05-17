@@ -108,16 +108,18 @@ export default function LandingPage() {
 
       {/* ── STATS STRIP ────────────────────────────────────── */}
       <section className="max-w-4xl mx-auto px-6 mb-24">
-        <div className="grid grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           {[
             { value: '100%', label: 'En el navegador', icon: 'public' },
             { value: '0', label: 'Datos almacenados', icon: 'storage' },
             { value: '∞', label: 'Repos soportados', icon: 'folder_open' },
           ].map(({ value, label, icon }) => (
-            <div key={label} className="glass rounded-[1.5rem] p-6 text-center">
-              <span className="material-symbols-outlined text-[#c0c1ff] text-3xl mb-2 block">{icon}</span>
-              <div className="text-3xl font-black text-[#e4e1ed] mb-1">{value}</div>
-              <div className="text-xs text-[#908fa0] uppercase tracking-widest">{label}</div>
+            <div key={label} className="glass rounded-[1.5rem] p-6 flex sm:flex-col items-center sm:text-center gap-4 sm:gap-0">
+              <span className="material-symbols-outlined text-[#c0c1ff] text-3xl sm:mb-2 block flex-shrink-0">{icon}</span>
+              <div className="flex-1 sm:flex-none">
+                <div className="text-3xl font-black text-[#e4e1ed] sm:mb-1">{value}</div>
+                <div className="text-xs text-[#908fa0] uppercase tracking-widest">{label}</div>
+              </div>
             </div>
           ))}
         </div>
@@ -224,7 +226,7 @@ export default function LandingPage() {
       {/* ── CTA FINAL ──────────────────────────────────────── */}
       <section className="max-w-4xl mx-auto px-6 mb-24 text-center">
         <div
-          className="rounded-[2rem] p-12"
+          className="rounded-[2rem] p-8 sm:p-12"
           style={{
             background: 'rgba(192,193,255,0.05)',
             border: '1px solid rgba(192,193,255,0.15)',

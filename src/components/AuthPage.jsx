@@ -195,29 +195,36 @@ export default function AuthPage() {
           </div>
 
           {/* Token form */}
-          <form onSubmit={handleSubmit} className="glass rounded-[1.5rem] p-6">
-            <label className="block text-sm font-semibold text-[#c7c4d7] mb-3">
-              Personal Access Token
-            </label>
-            <div className="relative mb-4">
+          <form onSubmit={handleSubmit} className="glass rounded-[1.5rem] p-6 mt-8">
+            <div className="flex items-center gap-2 mb-5">
+              <span className="material-symbols-outlined text-[#c0c1ff] text-xl">key</span>
+              <label className="text-base font-bold text-[#e4e1ed]">
+                Personal Access Token
+              </label>
+            </div>
+            <div className="relative mb-5">
               <input
                 type={masked ? 'password' : 'text'}
                 value={input}
                 onChange={e => setInput(e.target.value)}
                 placeholder="github_pat_..."
-                className="w-full px-4 py-3 rounded-xl text-sm font-mono outline-none transition-all duration-200"
+                className="w-full px-5 rounded-xl font-mono outline-none transition-all duration-200"
                 style={{
-                  background: 'rgba(11,14,20,0.6)',
-                  border: error ? '1px solid rgba(242,139,130,0.5)' : '1px solid rgba(255,255,255,0.1)',
+                  background: 'rgba(11,14,20,0.8)',
+                  border: error ? '2px solid rgba(242,139,130,0.6)' : '2px solid rgba(255,255,255,0.12)',
                   color: '#e4e1ed',
+                  fontSize: '0.95rem',
+                  paddingTop: '1rem',
+                  paddingBottom: '1rem',
+                  letterSpacing: '0.02em',
                 }}
-                onFocus={e => e.target.style.borderColor = 'rgba(192,193,255,0.5)'}
-                onBlur={e => e.target.style.borderColor = error ? 'rgba(242,139,130,0.5)' : 'rgba(255,255,255,0.1)'}
+                onFocus={e => { e.target.style.borderColor = 'rgba(192,193,255,0.6)'; e.target.style.boxShadow = '0 0 0 3px rgba(192,193,255,0.08)' }}
+                onBlur={e => { e.target.style.borderColor = error ? 'rgba(242,139,130,0.6)' : 'rgba(255,255,255,0.12)'; e.target.style.boxShadow = 'none' }}
               />
               <button
                 type="button"
                 onClick={() => setMasked(m => !m)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-[#908fa0] hover:text-[#c0c1ff] transition-colors"
+                className="absolute right-4 top-1/2 -translate-y-1/2 text-[#908fa0] hover:text-[#c0c1ff] transition-colors"
               >
                 <span className="material-symbols-outlined text-xl">{masked ? 'visibility' : 'visibility_off'}</span>
               </button>
@@ -225,7 +232,7 @@ export default function AuthPage() {
 
             {error && (
               <div
-                className="flex items-center gap-2 px-4 py-3 rounded-xl mb-4 text-sm"
+                className="flex items-center gap-2 px-4 py-3 rounded-xl mb-5 text-sm"
                 style={{ background: 'rgba(242,139,130,0.1)', border: '1px solid rgba(242,139,130,0.3)', color: '#f28b82' }}
               >
                 <span className="material-symbols-outlined text-base">error</span>
@@ -236,11 +243,11 @@ export default function AuthPage() {
             <button
               type="submit"
               disabled={loading || !input.trim()}
-              className="w-full py-3 rounded-[0.75rem] font-bold text-sm transition-all duration-200 hover:-translate-y-0.5 active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+              className="w-full py-4 rounded-[0.75rem] font-bold text-base transition-all duration-200 hover:-translate-y-0.5 active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
               style={{
                 background: 'linear-gradient(135deg, #c0c1ff 0%, #8083ff 100%)',
                 color: '#1000a9',
-                boxShadow: '0 4px 24px rgba(192,193,255,0.2)',
+                boxShadow: '0 4px 24px rgba(192,193,255,0.25)',
               }}
             >
               {loading ? (
