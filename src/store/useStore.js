@@ -53,6 +53,10 @@ const useStore = create(
       // Selected repo for detail
       selectedRepo: null,
       setSelectedRepo: (repo) => set({ selectedRepo: repo }),
+
+      // Active dashboard tab — shared so StatsPage can mirror it
+      activeTab: 'security',
+      setActiveTab: (tab) => set({ activeTab: tab }),
     }),
     {
       name: 'ghvc-store',

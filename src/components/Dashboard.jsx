@@ -327,7 +327,8 @@ export default function Dashboard() {
   const selectedRepo = useStore(s => s.selectedRepo)
   const setAllRepos = useStore(s => s.setAllRepos)
 
-  const [activeTab, setActiveTab] = useState('security') // 'security' | 'migrate'
+  const activeTab = useStore(s => s.activeTab)
+  const setActiveTab = useStore(s => s.setActiveTab)
   const [fixRepo, setFixRepo] = useState(null)
   const [bulkFixRepos, setBulkFixRepos] = useState(null)
   const [migrateRepo, setMigrateRepo] = useState(null)

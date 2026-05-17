@@ -417,7 +417,8 @@ export default function StatsPage() {
   const allReposLoaded = useStore(s => s.allReposLoaded)
   const migrateHistory = useStore(s => s.migrateHistory)
 
-  const [mode, setMode] = useState('security')
+  const activeTab = useStore(s => s.activeTab)
+  const [mode, setMode] = useState(activeTab)
 
   const TABS = [
     { id: 'security', label: 'Seguridad', icon: 'shield' },
