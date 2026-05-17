@@ -441,22 +441,29 @@ export default function Dashboard() {
       </div>
 
       {/* ── TABS ── */}
-      <div className="flex gap-0 mb-10" style={{ borderBottom: '1px solid rgba(255,255,255,0.07)' }}>
+      <div className="flex items-end mb-10 gap-1" style={{ borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
         {TABS.map(tab => {
           const active = activeTab === tab.id
           const accentColor = tab.id === 'migrate' ? '#ddb7ff' : '#c0c1ff'
+          const accentBg = tab.id === 'migrate' ? 'rgba(221,183,255,0.08)' : 'rgba(192,193,255,0.08)'
           return (
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
-              className="flex items-center gap-2 px-5 py-3 text-sm font-semibold transition-all duration-200 relative"
-              style={{ color: active ? accentColor : '#464554' }}
+              className="flex items-center gap-2 px-5 py-2.5 text-sm font-semibold transition-all duration-200 relative"
+              style={{
+                color: active ? accentColor : '#464554',
+                background: active ? accentBg : 'transparent',
+                borderRadius: '0.75rem 0.75rem 0 0',
+                border: active ? `1px solid rgba(255,255,255,0.1)` : '1px solid transparent',
+                borderBottom: active ? `1px solid transparent` : '1px solid transparent',
+                marginBottom: active ? '-1px' : '0',
+              }}
             >
-              <span className="material-symbols-outlined text-base" style={{ color: active ? accentColor : '#464554' }}>{tab.icon}</span>
+              <span className="material-symbols-outlined text-base" style={{ color: active ? accentColor : '#464554' }}>
+                {tab.icon}
+              </span>
               {tab.label}
-              {active && (
-                <span className="absolute bottom-0 left-0 right-0 h-0.5 rounded-t-full" style={{ background: accentColor }} />
-              )}
             </button>
           )
         })}
