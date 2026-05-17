@@ -183,7 +183,7 @@ export default function LandingPage() {
 
       {/* ── DISCLAIMER SECTION ─────────────────────────────── */}
       <section className="w-full px-6" style={{ marginBottom: '8rem' }}>
-        <div className="max-w-4xl mx-auto">
+        <div style={{ maxWidth: '1400px', margin: '0 auto' }}>
         <div
           className="rounded-[1.5rem] p-8"
           style={{ background: 'rgba(255,183,131,0.05)', border: '1px solid rgba(255,183,131,0.2)' }}
@@ -225,7 +225,7 @@ export default function LandingPage() {
 
       {/* ── CTA FINAL ──────────────────────────────────────── */}
       <section className="w-full px-6 text-center" style={{ marginBottom: '6rem' }}>
-        <div className="max-w-4xl mx-auto">
+        <div style={{ maxWidth: '1400px', margin: '0 auto' }}>
         <div
           className="rounded-[2rem] p-8 sm:p-12"
           style={{
