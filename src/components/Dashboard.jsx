@@ -40,14 +40,19 @@ function SkeletonCard() {
 
 function SummaryCard({ icon, value, label, color, bg }) {
   return (
-    <div className="glass rounded-[1.5rem] p-5 flex items-center gap-4">
-      <div className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0" style={{ background: bg }}>
-        <span className="material-symbols-outlined text-2xl" style={{ color }}>{icon}</span>
+    <div
+      className="rounded-[1.5rem] p-4 relative overflow-hidden flex flex-col gap-3"
+      style={{ background: 'rgba(31,31,39,0.5)', border: '1px solid rgba(255,255,255,0.07)', backdropFilter: 'blur(12px)' }}
+    >
+      {/* color accent bar */}
+      <div className="absolute left-0 top-3 bottom-3 w-[3px] rounded-r-full" style={{ background: color, opacity: 0.7 }} />
+      <div className="flex items-center gap-2 pl-3">
+        <div className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0" style={{ background: bg }}>
+          <span className="material-symbols-outlined text-base" style={{ color }}>{icon}</span>
+        </div>
+        <span className="text-[10px] text-[#908fa0] uppercase tracking-[0.08em] leading-tight">{label}</span>
       </div>
-      <div>
-        <div className="text-3xl font-black" style={{ color, fontFamily: 'Space Grotesk' }}>{value}</div>
-        <div className="text-xs text-[#908fa0] uppercase tracking-widest">{label}</div>
-      </div>
+      <div className="text-4xl font-black leading-none pl-3" style={{ color, fontFamily: 'Space Grotesk' }}>{value}</div>
     </div>
   )
 }
@@ -213,25 +218,29 @@ function MigrateTab({ onMigrate, onBulkMigrate }) {
 
   return (
     <>
-      {/* Info banner + reload */}
-      <div className="flex items-start gap-3 px-5 py-4 rounded-[1rem] mb-5 text-sm"
-        style={{ background: 'rgba(221,183,255,0.06)', border: '1px solid rgba(221,183,255,0.2)', color: '#c7c4d7' }}>
-        <span className="material-symbols-outlined text-[#ddb7ff] flex-shrink-0 mt-0.5">info</span>
-        <div className="flex-1">
-          <strong className="text-[#ddb7ff]">¿Por qué pnpm?</strong>
-          {' '}Hasta 3× más rápido que npm, ahorra espacio con un store compartido.
-          Cada repo abrirá un PR que debes revisar antes de mergear.
-          <span className="block mt-1 text-[#464554]">{npmRepos.length} repos JS/TS detectados.</span>
-        </div>
+      {/* Info strip + reload */}
+      <div className="flex items-center gap-3 px-4 py-2.5 rounded-[0.75rem] mb-6 text-xs"
+        style={{ background: 'rgba(221,183,255,0.06)', border: '1px solid rgba(221,183,255,0.15)', color: '#c7c4d7' }}>
+        <span className="material-symbols-outlined text-[#ddb7ff] text-base flex-shrink-0">info</span>
+        <span className="flex-1">
+          <span className="text-[#ddb7ff] font-semibold">{npmRepos.length} repos JS/TS</span>
+          {' '}· Cada migración abre un PR que debes revisar antes de mergear.
+        </span>
         <button onClick={() => { clearAllRepos(); clearSelection() }}
-          className="text-xs text-[#908fa0] hover:text-[#ddb7ff] transition-colors flex items-center gap-1 flex-shrink-0 mt-0.5">
-          <span className="material-symbols-outlined text-sm">refresh</span>
+          className="flex items-center gap-1 text-[#908fa0] hover:text-[#ddb7ff] transition-colors flex-shrink-0">
+          <span className="material-symbols-outlined text-base">refresh</span>
           Recargar
         </button>
       </div>
 
-      {/* Selection bar */}
+      {/* Section header */}
       <div className="flex items-center gap-3 mb-4">
+        <span className="text-xs font-semibold text-[#908fa0] uppercase tracking-[0.1em]">Repositorios JS/TS</span>
+        <div className="flex-1 h-px" style={{ background: 'rgba(255,255,255,0.06)' }} />
+      </div>
+
+      {/* Selection bar */}
+      <div className="flex items-center gap-3 mb-5">
         <button onClick={selected.size === npmRepos.length ? clearSelection : selectAll}
           className="flex items-center gap-1.5 text-xs text-[#908fa0] hover:text-[#ddb7ff] transition-colors">
           <div className="w-4 h-4 rounded flex items-center justify-center flex-shrink-0"
@@ -399,7 +408,7 @@ export default function Dashboard() {
   return (
     <main className="flex-1 max-w-6xl mx-auto w-full px-6 py-8">
       {/* ── HEADER ── */}
-      <div className="flex items-center justify-between mb-6 flex-wrap gap-4">
+      <div className="flex items-center justify-between mb-8 flex-wrap gap-4">
         <div>
           <h1 className="text-2xl font-bold text-[#e4e1ed]">
             Hola, <span className="accent-text">{user?.login}</span>
@@ -431,21 +440,25 @@ export default function Dashboard() {
       </div>
 
       {/* ── TABS ── */}
-      <div className="flex gap-1 p-1 rounded-xl mb-6" style={{ background: 'rgba(0,0,0,0.3)', width: 'fit-content' }}>
-        {TABS.map(tab => (
-          <button
-            key={tab.id}
-            onClick={() => setActiveTab(tab.id)}
-            className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-200"
-            style={activeTab === tab.id
-              ? { background: 'rgba(192,193,255,0.15)', color: tab.id === 'migrate' ? '#ddb7ff' : '#c0c1ff', border: `1px solid ${tab.id === 'migrate' ? 'rgba(221,183,255,0.3)' : 'rgba(192,193,255,0.3)'}` }
-              : { background: 'transparent', color: '#908fa0', border: '1px solid transparent' }
-            }
-          >
-            <span className="material-symbols-outlined text-sm">{tab.icon}</span>
-            {tab.label}
-          </button>
-        ))}
+      <div className="flex gap-0 mb-10" style={{ borderBottom: '1px solid rgba(255,255,255,0.07)' }}>
+        {TABS.map(tab => {
+          const active = activeTab === tab.id
+          const accentColor = tab.id === 'migrate' ? '#ddb7ff' : '#c0c1ff'
+          return (
+            <button
+              key={tab.id}
+              onClick={() => setActiveTab(tab.id)}
+              className="flex items-center gap-2 px-5 py-3 text-sm font-semibold transition-all duration-200 relative"
+              style={{ color: active ? accentColor : '#464554' }}
+            >
+              <span className="material-symbols-outlined text-base" style={{ color: active ? accentColor : '#464554' }}>{tab.icon}</span>
+              {tab.label}
+              {active && (
+                <span className="absolute bottom-0 left-0 right-0 h-0.5 rounded-t-full" style={{ background: accentColor }} />
+              )}
+            </button>
+          )
+        })}
       </div>
 
       {/* ── SCAN PROGRESS ── */}
@@ -510,16 +523,23 @@ export default function Dashboard() {
       {/* ── SECURITY TAB ── */}
       {activeTab === 'security' && scanResults && !scanning && (
         <>
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-10">
             <SummaryCard icon="warning" value={stats.repos} label="Repos vulnerables" color="#c0c1ff" bg="rgba(192,193,255,0.1)" />
             <SummaryCard icon="report" value={stats.critical} label="Críticas" color={SEV_CONFIG.critical.color} bg={SEV_CONFIG.critical.bg} />
             <SummaryCard icon="priority_high" value={stats.high} label="Altas" color={SEV_CONFIG.high.color} bg={SEV_CONFIG.high.bg} />
             <SummaryCard icon="info" value={stats.medium + stats.low} label="Medias/Bajas" color={SEV_CONFIG.medium.color} bg={SEV_CONFIG.medium.bg} />
           </div>
 
+          {/* Section header */}
+          <div className="flex items-center gap-3 mb-5">
+            <span className="text-xs font-semibold text-[#908fa0] uppercase tracking-[0.1em]">Repositorios</span>
+            <div className="flex-1 h-px" style={{ background: 'rgba(255,255,255,0.06)' }} />
+          </div>
+
           {/* Filters */}
-          <div className="flex flex-wrap items-center gap-2 mb-4">
-            <div className="flex items-center gap-1.5 no-scrollbar overflow-x-auto pb-1">
+          <div className="rounded-[1rem] px-4 py-3 mb-5 flex flex-wrap items-center gap-2"
+            style={{ background: 'rgba(0,0,0,0.2)', border: '1px solid rgba(255,255,255,0.05)' }}>
+            <div className="flex items-center gap-1.5 no-scrollbar overflow-x-auto">
               {['all', 'critical', 'high', 'medium', 'low'].map(sev => {
                 const active = filterSeverity === sev
                 const cfg = sev !== 'all' ? SEV_CONFIG[sev] : null
@@ -530,31 +550,33 @@ export default function Dashboard() {
                       background: cfg ? cfg.bg : 'rgba(192,193,255,0.15)',
                       color: cfg ? cfg.color : '#c0c1ff',
                       border: `1px solid ${cfg ? cfg.color : '#c0c1ff'}50`,
-                    } : { background: 'transparent', color: '#908fa0', border: '1px solid rgba(144,143,160,0.2)' }}
+                    } : { background: 'transparent', color: '#908fa0', border: '1px solid transparent' }}
                   >
                     {sev === 'all' ? 'Todas' : (SEV_CONFIG[sev]?.label || sev)}
                   </button>
                 )
               })}
             </div>
+            <div className="w-px h-4 mx-1 flex-shrink-0" style={{ background: 'rgba(255,255,255,0.1)' }} />
             <select value={filterLanguage} onChange={e => setFilterLanguage(e.target.value)}
-              className="px-3 py-1.5 rounded-full text-xs font-semibold outline-none cursor-pointer"
-              style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', color: '#908fa0' }}>
+              className="px-3 py-1.5 rounded-full text-xs font-semibold outline-none cursor-pointer flex-shrink-0"
+              style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.08)', color: '#908fa0' }}>
               {LANGUAGES.map(l => <option key={l} value={l === 'Todos' ? 'all' : l}>{l}</option>)}
             </select>
             <button onClick={() => setFilterFixable(!filterFixable)}
-              className="px-3 py-1.5 rounded-full text-xs font-semibold transition-all duration-200 flex items-center gap-1.5 whitespace-nowrap"
+              className="px-3 py-1.5 rounded-full text-xs font-semibold transition-all duration-200 flex items-center gap-1.5 whitespace-nowrap flex-shrink-0"
               style={filterFixable ? { background: 'rgba(129,201,149,0.15)', color: '#81c995', border: '1px solid rgba(129,201,149,0.4)' }
-                : { background: 'transparent', color: '#908fa0', border: '1px solid rgba(144,143,160,0.2)' }}>
+                : { background: 'transparent', color: '#908fa0', border: '1px solid transparent' }}>
               <span className="material-symbols-outlined text-xs">auto_fix_high</span>
               Solo con fix
             </button>
-            <span className="ml-auto text-xs text-[#464554]">{filtered.length} repos</span>
+            <span className="ml-auto text-xs text-[#464554] flex-shrink-0">{filtered.length} repos</span>
           </div>
 
           {/* Selection bar */}
           {filtered.length > 0 && (
-            <div className="flex items-center gap-3 mb-4">
+            <div className="flex items-center gap-3 mb-5 px-3 py-2 rounded-xl"
+              style={{ background: 'rgba(255,255,255,0.03)' }}>
               <button onClick={selected.size === filtered.length ? clearSelection : selectAll}
                 className="flex items-center gap-1.5 text-xs text-[#908fa0] hover:text-[#c0c1ff] transition-colors">
                 <div className="w-4 h-4 rounded flex items-center justify-center flex-shrink-0"
