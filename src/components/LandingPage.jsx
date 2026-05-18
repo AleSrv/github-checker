@@ -49,7 +49,7 @@ export default function LandingPage() {
           </div>
           <button
             onClick={() => navigate('/login')}
-            className="px-4 py-2 rounded-[0.75rem] text-sm font-semibold transition-all duration-200 hover:-translate-y-0.5"
+            className="px-5 py-2.5 rounded-[0.75rem] text-sm font-semibold transition-all duration-200 hover:-translate-y-0.5"
             style={{ background: 'linear-gradient(135deg, #c0c1ff, #8083ff)', color: '#1000a9' }}
           >
             Iniciar sesión
@@ -60,7 +60,7 @@ export default function LandingPage() {
       {/* ── HERO ───────────────────────────────────────────── */}
       <section className="w-full px-6 pt-24 flex flex-col items-center" style={{ paddingBottom: '7rem' }}>
         <div
-          className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-semibold uppercase tracking-widest mb-8"
+          className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full text-xs font-semibold uppercase tracking-widest mb-8"
           style={{ background: 'rgba(192,193,255,0.1)', border: '1px solid rgba(192,193,255,0.3)', color: '#c0c1ff' }}
         >
           <span className="w-2 h-2 rounded-full bg-[#c0c1ff] pulse-dot" />
@@ -114,7 +114,7 @@ export default function LandingPage() {
             { value: '0', label: 'Datos almacenados', icon: 'storage' },
             { value: '∞', label: 'Repos soportados', icon: 'folder_open' },
           ].map(({ value, label, icon }) => (
-            <div key={label} className="glass rounded-[1.5rem] p-6 flex sm:flex-col items-center sm:items-center gap-4 sm:gap-2 sm:text-center">
+            <div key={label} className="glass rounded-[1.5rem] p-8 flex sm:flex-col items-center sm:items-center gap-4 sm:gap-2 sm:text-center">
               <span className="material-symbols-outlined text-[#c0c1ff] text-3xl block flex-shrink-0">{icon}</span>
               <div className="flex-1 sm:flex-none text-left sm:text-center">
                 <div className="text-3xl font-black text-[#e4e1ed] sm:mb-1">{value}</div>
@@ -169,7 +169,7 @@ export default function LandingPage() {
           </div>
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {FEATURES.map(({ icon, text }) => (
-              <div key={text} className="glass rounded-[1rem] px-5 py-5 flex items-center gap-4">
+              <div key={text} className="glass rounded-[1rem] px-7 py-6 flex items-center gap-4">
                 <div className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0"
                   style={{ background: 'rgba(192,193,255,0.1)' }}>
                   <span className="material-symbols-outlined text-[#c0c1ff]">{icon}</span>
@@ -185,7 +185,7 @@ export default function LandingPage() {
       <section className="w-full px-6" style={{ marginBottom: '8rem' }}>
         <div style={{ maxWidth: '1400px', margin: '0 auto' }}>
         <div
-          className="rounded-[1.5rem] p-8"
+          className="rounded-[1.5rem] p-10"
           style={{ background: 'rgba(255,183,131,0.05)', border: '1px solid rgba(255,183,131,0.2)' }}
         >
           <div className="flex items-start gap-4">
@@ -240,7 +240,7 @@ export default function LandingPage() {
           <p className="text-[#908fa0] mb-8">Solo necesitas un GitHub Personal Access Token. Tarda 2 minutos.</p>
           <button
             onClick={() => navigate('/login')}
-            className="px-10 py-4 rounded-[0.75rem] text-base font-bold transition-all duration-200 hover:-translate-y-1 active:scale-[0.98]"
+            className="px-12 py-5 rounded-[0.75rem] text-base font-bold transition-all duration-200 hover:-translate-y-1 active:scale-[0.98]"
             style={{
               background: 'linear-gradient(135deg, #c0c1ff 0%, #8083ff 100%)',
               color: '#1000a9',
