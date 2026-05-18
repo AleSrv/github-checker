@@ -81,7 +81,7 @@ export default function LandingPage() {
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
           <button
             onClick={() => navigate('/login')}
-            className="px-8 py-4 rounded-[0.75rem] text-base font-bold transition-all duration-200 hover:-translate-y-0.5 active:scale-[0.98]"
+            className="px-10 py-5 rounded-[0.75rem] text-base font-bold transition-all duration-200 hover:-translate-y-0.5 active:scale-[0.98]"
             style={{
               background: 'linear-gradient(135deg, #c0c1ff 0%, #6f00be 100%)',
               color: '#fff',
@@ -95,7 +95,7 @@ export default function LandingPage() {
           </button>
           <button
             onClick={() => setDisclaimerOpen(true)}
-            className="px-8 py-4 rounded-[0.75rem] text-base font-semibold transition-all duration-200 hover:-translate-y-0.5 glass"
+            className="px-10 py-5 rounded-[0.75rem] text-base font-semibold transition-all duration-200 hover:-translate-y-0.5 glass"
             style={{ color: '#c7c4d7' }}
           >
             <span className="flex items-center gap-2 justify-center">
@@ -137,7 +137,7 @@ export default function LandingPage() {
             {STEPS.map((step) => (
               <div
                 key={step.number}
-                className="glass rounded-[1.5rem] p-8 flex flex-col items-center text-center gap-5 transition-all duration-300 hover:-translate-y-1 relative overflow-hidden"
+                className="glass rounded-[1.5rem] p-12 flex flex-col items-center text-center gap-5 transition-all duration-300 hover:-translate-y-1 relative overflow-hidden"
               >
                 <span
                   className="absolute top-4 left-5 text-5xl font-black opacity-10 select-none"
@@ -227,7 +227,7 @@ export default function LandingPage() {
       <section className="w-full px-6 text-center" style={{ marginBottom: '6rem' }}>
         <div style={{ maxWidth: '1400px', margin: '0 auto' }}>
         <div
-          className="rounded-[2rem] p-8 sm:p-12"
+          className="rounded-[2rem] p-12 sm:p-20"
           style={{
             background: 'rgba(192,193,255,0.05)',
             border: '1px solid rgba(192,193,255,0.15)',
