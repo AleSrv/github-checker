@@ -81,8 +81,9 @@ export default function LandingPage() {
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
           <button
             onClick={() => navigate('/login')}
-            className="px-10 py-5 rounded-[0.75rem] text-base font-bold transition-all duration-200 hover:-translate-y-0.5 active:scale-[0.98]"
+            className="rounded-[0.75rem] text-base font-bold transition-all duration-200 hover:-translate-y-0.5 active:scale-[0.98]"
             style={{
+              padding: '1.1rem 2.5rem',
               background: 'linear-gradient(135deg, #c0c1ff 0%, #6f00be 100%)',
               color: '#fff',
               boxShadow: '0 8px 32px rgba(192,193,255,0.25)',
@@ -95,8 +96,8 @@ export default function LandingPage() {
           </button>
           <button
             onClick={() => setDisclaimerOpen(true)}
-            className="px-10 py-5 rounded-[0.75rem] text-base font-semibold transition-all duration-200 hover:-translate-y-0.5 glass"
-            style={{ color: '#c7c4d7' }}
+            className="rounded-[0.75rem] text-base font-semibold transition-all duration-200 hover:-translate-y-0.5 glass"
+            style={{ padding: '1.1rem 2.5rem', color: '#c7c4d7' }}
           >
             <span className="flex items-center gap-2 justify-center">
               <span className="material-symbols-outlined text-xl">gavel</span>
