@@ -85,20 +85,20 @@ export default function AuthPage() {
       <div className="flex-1 flex items-center justify-center p-6">
         <div className="w-full max-w-xl">
           {/* Header */}
-          <div className="text-center mb-10">
+          <div className="text-center" style={{ marginBottom: '2.5rem' }}>
             <div
-              className="w-20 h-20 rounded-[1.5rem] flex items-center justify-center mx-auto mb-6"
-              style={{ background: 'rgba(192,193,255,0.1)', border: '1px solid rgba(192,193,255,0.2)' }}
+              className="w-20 h-20 rounded-[1.5rem] flex items-center justify-center mx-auto"
+              style={{ background: 'rgba(192,193,255,0.1)', border: '1px solid rgba(192,193,255,0.2)', marginBottom: '1.5rem' }}
             >
               <span className="material-symbols-outlined filled text-[#c0c1ff] text-4xl">key</span>
             </div>
-            <h1 className="text-3xl font-bold text-[#e4e1ed] mb-2">Conecta tu cuenta</h1>
+            <h1 className="text-3xl font-bold text-[#e4e1ed]" style={{ marginBottom: '0.5rem' }}>Conecta tu cuenta</h1>
             <p className="text-[#908fa0]">Necesitas un Personal Access Token de GitHub</p>
           </div>
 
           {/* Instructions card */}
-          <div className="glass rounded-[1.5rem] p-6 mb-6">
-            <h3 className="text-sm font-semibold text-[#c0c1ff] uppercase tracking-widest mb-4 flex items-center gap-2">
+          <div className="glass rounded-[1.5rem]" style={{ padding: '1.5rem', marginBottom: '1.5rem' }}>
+            <h3 className="text-sm font-semibold text-[#c0c1ff] uppercase tracking-widest flex items-center gap-2" style={{ marginBottom: '1rem' }}>
               <span className="material-symbols-outlined text-base">info</span>
               Cómo obtener tu token
             </h3>
@@ -243,7 +243,8 @@ export default function AuthPage() {
             <button
               type="submit"
               disabled={loading || !input.trim()}
-              className="w-full py-4 rounded-[0.75rem] font-bold text-base transition-all duration-200 hover:-translate-y-0.5 active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+              className="w-full rounded-[0.75rem] font-bold text-base transition-all duration-200 hover:-translate-y-0.5 active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+              style={{ paddingTop: '1rem', paddingBottom: '1rem' }}
               style={{
                 background: 'linear-gradient(135deg, #c0c1ff 0%, #8083ff 100%)',
                 color: '#1000a9',

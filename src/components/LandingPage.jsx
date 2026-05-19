@@ -58,7 +58,7 @@ export default function LandingPage() {
       </nav>
 
       {/* ── HERO ───────────────────────────────────────────── */}
-      <section className="w-full px-6 pt-24 flex flex-col items-center" style={{ paddingBottom: '7rem' }}>
+      <section className="w-full px-6 flex flex-col items-center" style={{ paddingTop: '6rem', paddingBottom: '7rem' }}>
         <div
           className="inline-flex items-center gap-2 rounded-full text-xs font-semibold uppercase tracking-widest"
           style={{ padding: '0.6rem 1.5rem', marginBottom: '2rem', background: 'rgba(192,193,255,0.1)', border: '1px solid rgba(192,193,255,0.3)', color: '#c0c1ff' }}
