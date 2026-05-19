@@ -61,8 +61,7 @@ export default function LandingPage() {
       <section className="w-full px-6 pt-24 flex flex-col items-center" style={{ paddingBottom: '7rem' }}>
         <div
           className="inline-flex items-center gap-2 rounded-full text-xs font-semibold uppercase tracking-widest"
-          style={{ padding: '0.6rem 1.5rem', marginBottom: '2rem' }}
-          style={{ background: 'rgba(192,193,255,0.1)', border: '1px solid rgba(192,193,255,0.3)', color: '#c0c1ff' }}
+          style={{ padding: '0.6rem 1.5rem', marginBottom: '2rem', background: 'rgba(192,193,255,0.1)', border: '1px solid rgba(192,193,255,0.3)', color: '#c0c1ff' }}
         >
           <span className="w-2 h-2 rounded-full bg-[#c0c1ff] pulse-dot" />
           Herramienta gratuita · Open Source
@@ -132,7 +131,7 @@ export default function LandingPage() {
         <div style={{ maxWidth: '1400px', margin: '0 auto' }}>
           <div className="text-center mb-14">
             <h2 className="text-3xl font-bold text-[#e4e1ed] mb-3">¿Cómo funciona?</h2>
-            <p className="text-[#908fa0]">Tres pasos. Sin configuración. Sin servidores propios.</p>
+            <p className="text-[#908fa0]" style={{ marginBottom: '2rem' }}>Tres pasos. Sin configuración. Sin servidores propios.</p>
           </div>
 
           <div className="grid md:grid-cols-3 gap-6">
