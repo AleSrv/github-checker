@@ -73,7 +73,7 @@ export default function LandingPage() {
           <br />en tus repos de GitHub
         </h1>
 
-        <p className="text-lg text-[#c7c4d7] max-w-2xl mb-12 leading-relaxed text-center">
+        <p className="text-lg text-[#c7c4d7] max-w-2xl leading-relaxed text-center" style={{ marginBottom: '3rem' }}>
           Escanea todas tus alertas de Dependabot, analiza qué paquetes necesitan actualización
           y lanza correcciones automáticas con un solo clic. Sin instalar nada.
         </p>
