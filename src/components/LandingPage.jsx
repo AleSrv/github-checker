@@ -49,8 +49,8 @@ export default function LandingPage() {
           </div>
           <button
             onClick={() => navigate('/login')}
-            className="px-5 py-2.5 rounded-[0.75rem] text-sm font-semibold transition-all duration-200 hover:-translate-y-0.5"
-            style={{ background: 'linear-gradient(135deg, #c0c1ff, #8083ff)', color: '#1000a9' }}
+            className="rounded-[0.75rem] text-sm font-semibold transition-all duration-200 hover:-translate-y-0.5"
+            style={{ padding: '0.6rem 1.25rem', background: 'linear-gradient(135deg, #c0c1ff, #8083ff)', color: '#1000a9' }}
           >
             Iniciar sesión
           </button>
