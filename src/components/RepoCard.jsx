@@ -19,8 +19,8 @@ function SevBadge({ severity, count }) {
   const cfg = SEV_CONFIG[severity] || SEV_CONFIG.unknown
   return (
     <span
-      className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-semibold"
-      style={{ background: cfg.bg, color: cfg.color }}
+      className="inline-flex items-center gap-1 rounded-full text-xs font-semibold"
+      style={{ padding: '0.125rem 0.5rem', background: cfg.bg, color: cfg.color }}
     >
       {count && <span>{count}</span>}
       {cfg.label}
@@ -43,8 +43,8 @@ export default function RepoCard({ repo, onFix }) {
 
   return (
     <div
-      className="glass rounded-[1.5rem] p-5 flex flex-col gap-4 transition-all duration-200 hover:-translate-y-0.5"
-      style={{ borderColor: `${cfg.color}30` }}
+      className="glass rounded-[1.5rem] flex flex-col gap-4 transition-all duration-200 hover:-translate-y-0.5"
+      style={{ padding: '1.25rem', borderColor: `${cfg.color}30` }}
     >
       {/* Header */}
       <div className="flex items-start justify-between gap-3">
@@ -59,8 +59,8 @@ export default function RepoCard({ repo, onFix }) {
             <div className="flex items-center gap-2 flex-wrap">
               <span className="font-semibold text-[#e4e1ed] text-sm truncate">{repo.name}</span>
               {repo.private && (
-                <span className="text-[10px] px-1.5 py-0.5 rounded-full uppercase tracking-widest"
-                  style={{ background: 'rgba(144,143,160,0.15)', color: '#908fa0' }}>
+                <span className="text-[10px] rounded-full uppercase tracking-widest"
+                  style={{ padding: '0.125rem 0.375rem', background: 'rgba(144,143,160,0.15)', color: '#908fa0' }}>
                   privado
                 </span>
               )}
@@ -89,8 +89,8 @@ export default function RepoCard({ repo, onFix }) {
         {lowCount  > 0 && <SevBadge severity="low" count={lowCount} />}
         {fixable && (
           <span
-            className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-semibold ml-auto"
-            style={{ background: 'rgba(129,201,149,0.15)', color: '#81c995' }}
+            className="inline-flex items-center gap-1 rounded-full text-xs font-semibold ml-auto"
+            style={{ padding: '0.125rem 0.5rem', background: 'rgba(129,201,149,0.15)', color: '#81c995' }}
           >
             <span className="material-symbols-outlined text-xs">auto_fix_high</span>
             Fix disponible
@@ -102,8 +102,8 @@ export default function RepoCard({ repo, onFix }) {
       <div className="flex gap-2 mt-auto">
         <button
           onClick={() => setSelectedRepo(repo)}
-          className="flex-1 py-2 rounded-xl text-xs font-semibold transition-all duration-200 hover:bg-white/10 glass"
-          style={{ color: '#c7c4d7' }}
+          className="flex-1 rounded-xl text-xs font-semibold transition-all duration-200 hover:bg-white/10 glass"
+          style={{ padding: '0.5rem', color: '#c7c4d7' }}
         >
           <span className="flex items-center justify-center gap-1.5">
             <span className="material-symbols-outlined text-sm">search</span>
@@ -112,8 +112,9 @@ export default function RepoCard({ repo, onFix }) {
         </button>
         <button
           onClick={() => onFix(repo)}
-          className="flex-1 py-2 rounded-xl text-xs font-semibold transition-all duration-200 hover:-translate-y-0.5 active:scale-[0.98]"
+          className="flex-1 rounded-xl text-xs font-semibold transition-all duration-200 hover:-translate-y-0.5 active:scale-[0.98]"
           style={{
+            padding: '0.5rem',
             background: `linear-gradient(135deg, ${cfg.color}40, ${cfg.color}20)`,
             border: `1px solid ${cfg.color}50`,
             color: cfg.color,

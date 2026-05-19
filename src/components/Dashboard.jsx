@@ -41,18 +41,18 @@ function SkeletonCard() {
 function SummaryCard({ icon, value, label, color, bg }) {
   return (
     <div
-      className="rounded-[1.5rem] p-5 relative overflow-hidden flex flex-col gap-4"
-      style={{ background: 'rgba(31,31,39,0.5)', border: '1px solid rgba(255,255,255,0.07)', backdropFilter: 'blur(12px)' }}
+      className="rounded-[1.5rem] relative overflow-hidden flex flex-col gap-4"
+      style={{ padding: '1.25rem', background: 'rgba(31,31,39,0.5)', border: '1px solid rgba(255,255,255,0.07)', backdropFilter: 'blur(12px)' }}
     >
       {/* color accent bar */}
       <div className="absolute left-0 top-3 bottom-3 w-[3px] rounded-r-full" style={{ background: color, opacity: 0.7 }} />
-      <div className="flex items-center gap-2 pl-3">
+      <div className="flex items-center gap-2" style={{ paddingLeft: '0.75rem' }}>
         <div className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0" style={{ background: bg }}>
           <span className="material-symbols-outlined text-base" style={{ color }}>{icon}</span>
         </div>
         <span className="text-[10px] text-[#908fa0] uppercase tracking-[0.08em] leading-tight">{label}</span>
       </div>
-      <div className="text-4xl font-black leading-none pl-3" style={{ color, fontFamily: 'Space Grotesk' }}>{value}</div>
+      <div className="text-4xl font-black leading-none" style={{ paddingLeft: '0.75rem', color, fontFamily: 'Space Grotesk' }}>{value}</div>
     </div>
   )
 }
@@ -61,8 +61,8 @@ function SummaryCard({ icon, value, label, color, bg }) {
 function MigrateRepoCard({ repo, onMigrate, migrated }) {
   return (
     <div
-      className="glass rounded-[1.5rem] p-5 flex flex-col gap-3 transition-all duration-200 hover:-translate-y-0.5"
-      style={{ borderColor: migrated ? 'rgba(221,183,255,0.3)' : 'rgba(255,255,255,0.08)' }}
+      className="glass rounded-[1.5rem] flex flex-col gap-3 transition-all duration-200 hover:-translate-y-0.5"
+      style={{ padding: '1.25rem', borderColor: migrated ? 'rgba(221,183,255,0.3)' : 'rgba(255,255,255,0.08)' }}
     >
       <div className="flex items-start gap-3">
         <div
@@ -80,8 +80,8 @@ function MigrateRepoCard({ repo, onMigrate, migrated }) {
           <div className="flex items-center gap-2 flex-wrap">
             <span className="font-semibold text-[#e4e1ed] text-sm truncate">{repo.name}</span>
             {repo.private && (
-              <span className="text-[10px] px-1.5 py-0.5 rounded-full uppercase tracking-widest"
-                style={{ background: 'rgba(144,143,160,0.15)', color: '#908fa0' }}>
+              <span className="text-[10px] rounded-full uppercase tracking-widest"
+                style={{ padding: '0.125rem 0.375rem', background: 'rgba(144,143,160,0.15)', color: '#908fa0' }}>
                 privado
               </span>
             )}
@@ -89,8 +89,8 @@ function MigrateRepoCard({ repo, onMigrate, migrated }) {
           <span className="text-xs text-[#908fa0]">{repo.language}</span>
         </div>
         {migrated && (
-          <span className="text-xs px-2 py-0.5 rounded-full flex-shrink-0"
-            style={{ background: 'rgba(221,183,255,0.15)', color: '#ddb7ff' }}>
+          <span className="text-xs rounded-full flex-shrink-0"
+            style={{ padding: '0.125rem 0.5rem', background: 'rgba(221,183,255,0.15)', color: '#ddb7ff' }}>
             lanzado
           </span>
         )}
@@ -99,8 +99,9 @@ function MigrateRepoCard({ repo, onMigrate, migrated }) {
       <button
         onClick={() => onMigrate(repo)}
         disabled={migrated}
-        className="w-full py-2 rounded-xl text-xs font-bold transition-all duration-200 hover:-translate-y-0.5 active:scale-[0.98] disabled:opacity-40 disabled:cursor-not-allowed disabled:transform-none"
+        className="w-full rounded-xl text-xs font-bold transition-all duration-200 hover:-translate-y-0.5 active:scale-[0.98] disabled:opacity-40 disabled:cursor-not-allowed disabled:transform-none"
         style={{
+          padding: '0.5rem',
           background: migrated
             ? 'rgba(221,183,255,0.08)'
             : 'linear-gradient(135deg, rgba(221,183,255,0.2), rgba(168,85,247,0.15))',
@@ -114,6 +115,46 @@ function MigrateRepoCard({ repo, onMigrate, migrated }) {
         </span>
       </button>
     </div>
+  )
+}
+
+// ── Load repos button (shared between header and MigrateTab) ────────────────
+function LoadReposButton() {
+  const token = useStore(s => s.token)
+  const setAllRepos = useStore(s => s.setAllRepos)
+  const clearAllRepos = useStore(s => s.clearAllRepos)
+  const [loading, setLoading] = useState(false)
+
+  async function load() {
+    setLoading(true)
+    clearAllRepos()
+    try {
+      const all = await getRepos(token)
+      setAllRepos(all)
+    } catch (err) {
+      toast(err.message || 'Error al cargar repositorios', 'error')
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  return (
+    <button
+      onClick={load}
+      disabled={loading}
+      className="flex items-center gap-2 rounded-[0.75rem] font-semibold text-sm transition-all duration-200 hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+      style={{
+        padding: '0.625rem 1.25rem',
+        background: loading ? 'rgba(221,183,255,0.1)' : 'linear-gradient(135deg, #ddb7ff, #a855f7)',
+        color: loading ? '#ddb7ff' : '#2d0066',
+        border: loading ? '1px solid rgba(221,183,255,0.3)' : 'none',
+      }}
+    >
+      <span className={`material-symbols-outlined text-xl ${loading ? 'animate-spin' : ''}`}>
+        {loading ? 'sync' : 'download'}
+      </span>
+      {loading ? 'Cargando...' : 'Cargar repositorios'}
+    </button>
   )
 }
 
@@ -191,18 +232,10 @@ function MigrateTab({ onMigrate, onBulkMigrate }) {
           style={{ background: 'rgba(221,183,255,0.08)', border: '1px solid rgba(221,183,255,0.15)' }}>
           <span className="material-symbols-outlined text-[#ddb7ff] text-5xl">package_2</span>
         </div>
-        <h2 className="text-xl font-bold text-[#e4e1ed] mb-2">Migrar repos a pnpm</h2>
-        <p className="text-sm text-[#908fa0] mb-8 max-w-sm mx-auto">
-          Carga tus repositorios JavaScript/TypeScript para migrarlos de npm a pnpm con un clic.
+        <h2 className="text-xl font-bold text-[#e4e1ed]" style={{ marginBottom: '0.5rem' }}>Migrar repos a pnpm</h2>
+        <p className="text-sm text-[#908fa0] max-w-sm mx-auto" style={{ marginTop: '0.5rem' }}>
+          Pulsa <strong style={{ color: '#ddb7ff' }}>Cargar repositorios</strong> para listar tus repos JavaScript/TypeScript y migrarlos de npm a pnpm con un clic.
         </p>
-        <button
-          onClick={loadRepos}
-          className="flex items-center gap-2 px-6 py-3 rounded-[0.75rem] font-bold text-sm mx-auto transition-all duration-200 hover:-translate-y-0.5"
-          style={{ background: 'linear-gradient(135deg, #ddb7ff, #a855f7)', color: '#2d0066' }}
-        >
-          <span className="material-symbols-outlined text-xl">download</span>
-          Cargar repositorios
-        </button>
       </div>
     )
   }
@@ -219,8 +252,8 @@ function MigrateTab({ onMigrate, onBulkMigrate }) {
   return (
     <>
       {/* Info strip + reload */}
-      <div className="flex items-center gap-3 px-4 py-2.5 rounded-[0.75rem] mb-6 text-xs"
-        style={{ background: 'rgba(221,183,255,0.06)', border: '1px solid rgba(221,183,255,0.15)', color: '#c7c4d7' }}>
+      <div className="flex items-center gap-3 rounded-[0.75rem] text-xs"
+        style={{ padding: '0.625rem 1rem', marginBottom: '1.5rem', background: 'rgba(221,183,255,0.06)', border: '1px solid rgba(221,183,255,0.15)', color: '#c7c4d7' }}>
         <span className="material-symbols-outlined text-[#ddb7ff] text-base flex-shrink-0">info</span>
         <span className="flex-1">
           <span className="text-[#ddb7ff] font-semibold">{npmRepos.length} repos JS/TS</span>
@@ -234,13 +267,13 @@ function MigrateTab({ onMigrate, onBulkMigrate }) {
       </div>
 
       {/* Section header */}
-      <div className="flex items-center gap-3 mb-4">
+      <div className="flex items-center gap-3" style={{ marginBottom: '1rem' }}>
         <span className="text-xs font-semibold text-[#908fa0] uppercase tracking-[0.1em]">Repositorios JS/TS</span>
         <div className="flex-1 h-px" style={{ background: 'rgba(255,255,255,0.06)' }} />
       </div>
 
       {/* Selection bar */}
-      <div className="flex items-center gap-3 mb-5">
+      <div className="flex items-center gap-3" style={{ marginBottom: '1.25rem' }}>
         <button onClick={selected.size === npmRepos.length ? clearSelection : selectAll}
           className="flex items-center gap-1.5 text-xs text-[#908fa0] hover:text-[#ddb7ff] transition-colors">
           <div className="w-4 h-4 rounded flex items-center justify-center flex-shrink-0"
@@ -256,8 +289,8 @@ function MigrateTab({ onMigrate, onBulkMigrate }) {
             <span className="text-xs text-[#ddb7ff]">{selected.size} seleccionado{selected.size !== 1 ? 's' : ''}</span>
             <button
               onClick={() => onBulkMigrate(npmRepos.filter(r => selected.has(r.name)))}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold transition-all duration-200 hover:-translate-y-0.5 ml-auto"
-              style={{ background: 'linear-gradient(135deg, #ddb7ff, #a855f7)', color: '#2d0066' }}>
+              className="flex items-center gap-1.5 rounded-full text-xs font-bold transition-all duration-200 hover:-translate-y-0.5 ml-auto"
+              style={{ padding: '0.375rem 0.75rem', background: 'linear-gradient(135deg, #ddb7ff, #a855f7)', color: '#2d0066' }}>
               <span className="material-symbols-outlined text-sm">rocket_launch</span>
               Migrar {selected.size} repos
             </button>
@@ -407,9 +440,9 @@ export default function Dashboard() {
   ]
 
   return (
-    <main className="flex-1 w-full px-6 py-8" style={{ maxWidth: '1400px', marginLeft: 'auto', marginRight: 'auto' }}>
+    <main className="flex-1 w-full" style={{ maxWidth: '1400px', marginLeft: 'auto', marginRight: 'auto', padding: '2rem 1.5rem' }}>
       {/* ── HEADER ── */}
-      <div className="flex items-center justify-between mb-8 flex-wrap gap-4">
+      <div className="flex items-center justify-between flex-wrap gap-4" style={{ marginBottom: '2rem' }}>
         <div>
           <h1 className="text-2xl font-bold text-[#e4e1ed]">
             Hola, <span className="accent-text">{user?.login}</span>
@@ -423,25 +456,30 @@ export default function Dashboard() {
             }
           </p>
         </div>
-        <button
-          onClick={runScan}
-          disabled={scanning}
-          className="flex items-center gap-2 px-5 py-2.5 rounded-[0.75rem] font-semibold text-sm transition-all duration-200 hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
-          style={{
-            background: scanning ? 'rgba(192,193,255,0.1)' : 'linear-gradient(135deg, #c0c1ff, #8083ff)',
-            color: scanning ? '#c0c1ff' : '#1000a9',
-            border: scanning ? '1px solid rgba(192,193,255,0.3)' : 'none',
-          }}
-        >
-          <span className={`material-symbols-outlined text-xl ${scanning ? 'animate-spin' : ''}`}>
-            {scanning ? 'sync' : 'search'}
-          </span>
-          {scanning ? 'Escaneando...' : 'Nuevo escaneo'}
-        </button>
+        {activeTab === 'security' ? (
+          <button
+            onClick={runScan}
+            disabled={scanning}
+            className="flex items-center gap-2 rounded-[0.75rem] font-semibold text-sm transition-all duration-200 hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+            style={{
+              padding: '0.625rem 1.25rem',
+              background: scanning ? 'rgba(192,193,255,0.1)' : 'linear-gradient(135deg, #c0c1ff, #8083ff)',
+              color: scanning ? '#c0c1ff' : '#1000a9',
+              border: scanning ? '1px solid rgba(192,193,255,0.3)' : 'none',
+            }}
+          >
+            <span className={`material-symbols-outlined text-xl ${scanning ? 'animate-spin' : ''}`}>
+              {scanning ? 'sync' : 'search'}
+            </span>
+            {scanning ? 'Escaneando...' : 'Nuevo escaneo'}
+          </button>
+        ) : (
+          <LoadReposButton />
+        )}
       </div>
 
       {/* ── TABS ── */}
-      <div className="flex items-end mb-10 gap-2" style={{ borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
+      <div className="flex items-end gap-2" style={{ borderBottom: '1px solid rgba(255,255,255,0.1)', marginBottom: '2.5rem' }}>
         {TABS.map(tab => {
           const active = activeTab === tab.id
           const accentColor = tab.id === 'migrate' ? '#ddb7ff' : '#c0c1ff'
@@ -450,8 +488,9 @@ export default function Dashboard() {
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
-              className="flex items-center gap-2 px-7 py-2.5 text-sm font-semibold transition-all duration-200 relative"
+              className="flex items-center gap-2 text-sm font-semibold transition-all duration-200 relative"
               style={{
+                padding: '0.625rem 1.75rem',
                 color: active ? accentColor : '#464554',
                 background: active ? accentBg : 'transparent',
                 borderRadius: '0.75rem 0.75rem 0 0',
@@ -471,8 +510,8 @@ export default function Dashboard() {
 
       {/* ── SCAN PROGRESS ── */}
       {scanning && (
-        <div className="glass rounded-[1.5rem] p-6 mt-6 mb-10">
-          <div className="flex items-center justify-between mb-3 text-sm">
+        <div className="glass rounded-[1.5rem]" style={{ padding: '1.5rem', marginTop: '1.5rem', marginBottom: '2.5rem' }}>
+          <div className="flex items-center justify-between text-sm" style={{ marginBottom: '0.75rem' }}>
             <span className="text-[#c7c4d7]">Analizando alertas de Dependabot...</span>
             <span className="text-[#c0c1ff] font-semibold">{progressPct}%</span>
           </div>
@@ -489,8 +528,8 @@ export default function Dashboard() {
       {/* ── ERROR ── */}
       {scanError && (
         <div
-          className="flex items-center gap-3 px-5 py-4 rounded-[1rem] mb-8 text-sm"
-          style={{ background: 'rgba(242,139,130,0.1)', border: '1px solid rgba(242,139,130,0.3)', color: '#f28b82' }}
+          className="flex items-center gap-3 rounded-[1rem] text-sm"
+          style={{ padding: '1rem 1.25rem', marginBottom: '2rem', background: 'rgba(242,139,130,0.1)', border: '1px solid rgba(242,139,130,0.3)', color: '#f28b82' }}
         >
           <span className="material-symbols-outlined">error</span>
           {scanError}
@@ -513,25 +552,17 @@ export default function Dashboard() {
           >
             <span className="material-symbols-outlined text-[#c0c1ff] text-5xl">shield</span>
           </div>
-          <h2 className="text-xl font-bold text-[#e4e1ed] mb-2">Escanea tus repositorios</h2>
-          <p className="text-sm text-[#908fa0] mb-8 max-w-sm mx-auto">
-            Analiza todas tus repos en busca de vulnerabilidades Dependabot y corrígelas con un clic.
+          <h2 className="text-xl font-bold text-[#e4e1ed]" style={{ marginBottom: '0.5rem' }}>Escanea tus repositorios</h2>
+          <p className="text-sm text-[#908fa0] max-w-sm mx-auto" style={{ marginTop: '0.5rem' }}>
+            Pulsa <strong style={{ color: '#c0c1ff' }}>Nuevo escaneo</strong> para analizar todas tus repos en busca de vulnerabilidades Dependabot.
           </p>
-          <button
-            onClick={runScan}
-            className="flex items-center gap-2 px-6 py-3 rounded-[0.75rem] font-bold text-sm mx-auto transition-all duration-200 hover:-translate-y-0.5"
-            style={{ background: 'linear-gradient(135deg, #c0c1ff, #8083ff)', color: '#1000a9' }}
-          >
-            <span className="material-symbols-outlined text-xl">search</span>
-            Iniciar escaneo
-          </button>
         </div>
       )}
 
       {/* ── SECURITY TAB ── */}
       {activeTab === 'security' && scanResults && !scanning && (
         <>
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-10">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4" style={{ marginBottom: '2.5rem' }}>
             <SummaryCard icon="warning" value={stats.repos} label="Repos vulnerables" color="#c0c1ff" bg="rgba(192,193,255,0.1)" />
             <SummaryCard icon="report" value={stats.critical} label="Críticas" color={SEV_CONFIG.critical.color} bg={SEV_CONFIG.critical.bg} />
             <SummaryCard icon="priority_high" value={stats.high} label="Altas" color={SEV_CONFIG.high.color} bg={SEV_CONFIG.high.bg} />
@@ -539,13 +570,13 @@ export default function Dashboard() {
           </div>
 
           {/* Section header */}
-          <div className="flex items-center gap-3 mb-5">
+          <div className="flex items-center gap-3" style={{ marginBottom: '1.25rem' }}>
             <span className="text-xs font-semibold text-[#908fa0] uppercase tracking-[0.1em]">Repositorios</span>
             <div className="flex-1 h-px" style={{ background: 'rgba(255,255,255,0.06)' }} />
           </div>
 
           {/* Filters */}
-          <div className="rounded-[1rem] px-4 py-3 mb-5 flex flex-wrap items-center gap-2"
+          <div className="rounded-[1rem] flex flex-wrap items-center gap-2" style={{ padding: '0.75rem 1rem', marginBottom: '1.25rem' }}
             style={{ background: 'rgba(0,0,0,0.2)', border: '1px solid rgba(255,255,255,0.05)' }}>
             <div className="flex items-center gap-1.5 no-scrollbar overflow-x-auto">
               {['all', 'critical', 'high', 'medium', 'low'].map(sev => {
@@ -583,8 +614,8 @@ export default function Dashboard() {
 
           {/* Selection bar */}
           {filtered.length > 0 && (
-            <div className="flex items-center gap-3 mb-5 px-3 py-2 rounded-xl"
-              style={{ background: 'rgba(255,255,255,0.03)' }}>
+            <div className="flex items-center gap-3 rounded-xl"
+              style={{ padding: '0.5rem 0.75rem', marginBottom: '1.25rem', background: 'rgba(255,255,255,0.03)' }}>
               <button onClick={selected.size === filtered.length ? clearSelection : selectAll}
                 className="flex items-center gap-1.5 text-xs text-[#908fa0] hover:text-[#c0c1ff] transition-colors">
                 <div className="w-4 h-4 rounded flex items-center justify-center flex-shrink-0"
@@ -600,8 +631,8 @@ export default function Dashboard() {
                   <span className="text-xs text-[#c0c1ff]">{selected.size} seleccionado{selected.size !== 1 ? 's' : ''}</span>
                   <button
                     onClick={() => setBulkFixRepos(filtered.filter(r => selected.has(r.name)))}
-                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold transition-all duration-200 hover:-translate-y-0.5 ml-auto"
-                    style={{ background: 'linear-gradient(135deg, #c0c1ff, #8083ff)', color: '#1000a9' }}>
+                    className="flex items-center gap-1.5 rounded-full text-xs font-bold transition-all duration-200 hover:-translate-y-0.5 ml-auto"
+                    style={{ padding: '0.375rem 0.75rem', background: 'linear-gradient(135deg, #c0c1ff, #8083ff)', color: '#1000a9' }}>
                     <span className="material-symbols-outlined text-sm">auto_fix_high</span>
                     Fix {selected.size} repos
                   </button>

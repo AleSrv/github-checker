@@ -157,14 +157,14 @@ function SecurityStats({ scanResults, fixHistory }) {
   }
 
   return (
-    <div className="space-y-8">
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
       {/* Summary pills */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
         {Object.entries(stats.severityCounts).map(([sev, count]) => {
           const cfg = SEV_CONFIG[sev]
           return (
-            <div key={sev} className="glass rounded-[1.5rem] p-5 text-center">
-              <div className="text-4xl font-black mb-1" style={{ color: cfg.color, fontFamily: 'Space Grotesk' }}>
+            <div key={sev} className="glass rounded-[1.5rem] text-center" style={{ padding: '1.25rem' }}>
+              <div className="text-4xl font-black" style={{ color: cfg.color, fontFamily: 'Space Grotesk', marginBottom: '0.25rem' }}>
                 {count}
               </div>
               <div className="text-xs uppercase tracking-widest font-semibold" style={{ color: cfg.color }}>
@@ -177,11 +177,11 @@ function SecurityStats({ scanResults, fixHistory }) {
 
       {/* Charts row */}
       <div className="grid lg:grid-cols-2 gap-6">
-        <div className="glass rounded-[1.5rem] p-6">
-          <h2 className="text-xs font-semibold text-[#908fa0] uppercase tracking-widest mb-1">
+        <div className="glass rounded-[1.5rem]" style={{ padding: '1.5rem' }}>
+          <h2 className="text-xs font-semibold text-[#908fa0] uppercase tracking-widest" style={{ marginBottom: '0.25rem' }}>
             Distribución por severidad
           </h2>
-          <p className="text-[#464554] text-xs mb-4">{stats.total} vulnerabilidades totales</p>
+          <p className="text-[#464554] text-xs" style={{ marginBottom: '1rem' }}>{stats.total} vulnerabilidades totales</p>
           <div style={{ width: '100%', height: 260 }}>
             <ResponsiveContainer width="100%" height="100%">
               <PieChart>
@@ -215,11 +215,11 @@ function SecurityStats({ scanResults, fixHistory }) {
           </div>
         </div>
 
-        <div className="glass rounded-[1.5rem] p-6">
-          <h2 className="text-xs font-semibold text-[#908fa0] uppercase tracking-widest mb-1">
+        <div className="glass rounded-[1.5rem]" style={{ padding: '1.5rem' }}>
+          <h2 className="text-xs font-semibold text-[#908fa0] uppercase tracking-widest" style={{ marginBottom: '0.25rem' }}>
             Repos más vulnerables
           </h2>
-          <p className="text-[#464554] text-xs mb-4">{stats.topRepos.length} repos con alertas abiertas</p>
+          <p className="text-[#464554] text-xs" style={{ marginBottom: '1rem' }}>{stats.topRepos.length} repos con alertas abiertas</p>
           <div style={{ width: '100%', height: 260 }}>
             <ResponsiveContainer width="100%" height="100%">
               <BarChart
@@ -242,20 +242,20 @@ function SecurityStats({ scanResults, fixHistory }) {
       </div>
 
       {/* Top packages table */}
-      <div className="glass rounded-[1.5rem] p-6">
-        <h2 className="text-xs font-semibold text-[#908fa0] uppercase tracking-widest mb-6 flex items-center gap-2">
+      <div className="glass rounded-[1.5rem]" style={{ padding: '1.5rem' }}>
+        <h2 className="text-xs font-semibold text-[#908fa0] uppercase tracking-widest flex items-center gap-2" style={{ marginBottom: '1.5rem' }}>
           <span className="material-symbols-outlined filled text-[#ffb783] text-base">workspace_premium</span>
           Top 10 paquetes más problemáticos
         </h2>
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
-              <tr className="text-left border-b border-white/8">
-                <th className="pb-3 pr-3 text-[#464554] text-xs uppercase tracking-wide font-medium w-6">#</th>
-                <th className="pb-3 pr-3 text-[#464554] text-xs uppercase tracking-wide font-medium">Paquete</th>
-                <th className="pb-3 pr-3 text-[#464554] text-xs uppercase tracking-wide font-medium">Repos</th>
-                <th className="pb-3 pr-3 text-[#464554] text-xs uppercase tracking-wide font-medium">Alertas</th>
-                <th className="pb-3 text-[#464554] text-xs uppercase tracking-wide font-medium">Severidad</th>
+              <tr className="text-left" style={{ borderBottom: '1px solid rgba(255,255,255,0.08)' }}>
+                <th style={{ paddingBottom: '0.75rem', paddingRight: '0.75rem', width: '1.5rem' }} className="text-[#464554] text-xs uppercase tracking-wide font-medium">#</th>
+                <th style={{ paddingBottom: '0.75rem', paddingRight: '0.75rem' }} className="text-[#464554] text-xs uppercase tracking-wide font-medium">Paquete</th>
+                <th style={{ paddingBottom: '0.75rem', paddingRight: '0.75rem' }} className="text-[#464554] text-xs uppercase tracking-wide font-medium">Repos</th>
+                <th style={{ paddingBottom: '0.75rem', paddingRight: '0.75rem' }} className="text-[#464554] text-xs uppercase tracking-wide font-medium">Alertas</th>
+                <th style={{ paddingBottom: '0.75rem' }} className="text-[#464554] text-xs uppercase tracking-wide font-medium">Severidad</th>
               </tr>
             </thead>
             <tbody>
@@ -263,21 +263,21 @@ function SecurityStats({ scanResults, fixHistory }) {
                 const cfg = SEV_CONFIG[pkg.severity] || SEV_CONFIG.unknown
                 const barWidth = Math.max(8, (pkg.repos / stats.topPackages[0].repos) * 80)
                 return (
-                  <tr key={pkg.package} className="border-b border-white/4 last:border-0">
-                    <td className="py-3 pr-3 text-[#464554] text-xs font-mono">{i + 1}</td>
-                    <td className="py-3 pr-3">
+                  <tr key={pkg.package} style={{ borderBottom: '1px solid rgba(255,255,255,0.04)' }}>
+                    <td style={{ padding: '0.75rem 0.75rem 0.75rem 0' }} className="text-[#464554] text-xs font-mono">{i + 1}</td>
+                    <td style={{ padding: '0.75rem 0.75rem 0.75rem 0' }}>
                       <span className="font-mono text-[#e4e1ed] text-sm">{pkg.package}</span>
                     </td>
-                    <td className="py-3 pr-3">
+                    <td style={{ padding: '0.75rem 0.75rem 0.75rem 0' }}>
                       <div className="flex items-center gap-2">
                         <div className="h-1.5 rounded-full" style={{ width: barWidth, background: 'rgba(192,193,255,0.5)' }} />
                         <span className="text-[#c7c4d7] text-xs">{pkg.repos}</span>
                       </div>
                     </td>
-                    <td className="py-3 pr-3 text-[#c7c4d7] text-xs">{pkg.alerts}</td>
-                    <td className="py-3">
-                      <span className="px-2 py-0.5 rounded-full text-xs font-semibold"
-                        style={{ background: cfg.bg, color: cfg.color }}>
+                    <td style={{ padding: '0.75rem 0.75rem 0.75rem 0' }} className="text-[#c7c4d7] text-xs">{pkg.alerts}</td>
+                    <td style={{ padding: '0.75rem 0' }}>
+                      <span className="text-xs font-semibold"
+                        style={{ padding: '0.125rem 0.5rem', borderRadius: '9999px', background: cfg.bg, color: cfg.color }}>
                         {cfg.label}
                       </span>
                     </td>
@@ -290,8 +290,8 @@ function SecurityStats({ scanResults, fixHistory }) {
       </div>
 
       {/* Fix history */}
-      <div className="glass rounded-[1.5rem] p-6">
-        <h2 className="text-xs font-semibold text-[#908fa0] uppercase tracking-widest mb-4 flex items-center gap-2">
+      <div className="glass rounded-[1.5rem]" style={{ padding: '1.5rem' }}>
+        <h2 className="text-xs font-semibold text-[#908fa0] uppercase tracking-widest flex items-center gap-2" style={{ marginBottom: '1rem' }}>
           <span className="material-symbols-outlined text-[#c0c1ff] text-base">history</span>
           Historial de correcciones de seguridad
         </h2>
@@ -344,23 +344,23 @@ function MigrateStats({ allRepos, allReposLoaded, migrateHistory }) {
   }
 
   return (
-    <div className="space-y-8">
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
       {/* Summary cards */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <div className="glass rounded-[1.5rem] p-5 text-center">
-          <div className="text-4xl font-black mb-1" style={{ color: '#ddb7ff', fontFamily: 'Space Grotesk' }}>
+        <div className="glass rounded-[1.5rem] text-center" style={{ padding: '1.25rem' }}>
+          <div className="text-4xl font-black" style={{ color: '#ddb7ff', fontFamily: 'Space Grotesk', marginBottom: '0.25rem' }}>
             {allReposLoaded ? npmRepos.length : '—'}
           </div>
           <div className="text-xs uppercase tracking-widest font-semibold text-[#ddb7ff]">Repos JS/TS</div>
         </div>
-        <div className="glass rounded-[1.5rem] p-5 text-center">
-          <div className="text-4xl font-black mb-1" style={{ color: '#81c995', fontFamily: 'Space Grotesk' }}>
+        <div className="glass rounded-[1.5rem] text-center" style={{ padding: '1.25rem' }}>
+          <div className="text-4xl font-black" style={{ color: '#81c995', fontFamily: 'Space Grotesk', marginBottom: '0.25rem' }}>
             {migrated}
           </div>
           <div className="text-xs uppercase tracking-widest font-semibold text-[#81c995]">Migraciones lanzadas</div>
         </div>
-        <div className="glass rounded-[1.5rem] p-5 text-center">
-          <div className="text-4xl font-black mb-1" style={{ color: '#fdd663', fontFamily: 'Space Grotesk' }}>
+        <div className="glass rounded-[1.5rem] text-center" style={{ padding: '1.25rem' }}>
+          <div className="text-4xl font-black" style={{ color: '#fdd663', fontFamily: 'Space Grotesk', marginBottom: '0.25rem' }}>
             {allReposLoaded ? pending : '—'}
           </div>
           <div className="text-xs uppercase tracking-widest font-semibold text-[#fdd663]">Pendientes</div>
@@ -369,11 +369,11 @@ function MigrateStats({ allRepos, allReposLoaded, migrateHistory }) {
 
       {/* Language breakdown chart */}
       {allReposLoaded && topReposData.length > 0 && (
-        <div className="glass rounded-[1.5rem] p-6">
-          <h2 className="text-xs font-semibold text-[#908fa0] uppercase tracking-widest mb-1">
+        <div className="glass rounded-[1.5rem]" style={{ padding: '1.5rem' }}>
+          <h2 className="text-xs font-semibold text-[#908fa0] uppercase tracking-widest" style={{ marginBottom: '0.25rem' }}>
             Repos JS/TS por lenguaje
           </h2>
-          <p className="text-[#464554] text-xs mb-4">{npmRepos.length} repos candidatos a migración</p>
+          <p className="text-[#464554] text-xs" style={{ marginBottom: '1rem' }}>{npmRepos.length} repos candidatos a migración</p>
           <div style={{ width: '100%', height: 180 }}>
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={topReposData} margin={{ top: 0, right: 20, left: 0, bottom: 0 }}>
@@ -391,8 +391,8 @@ function MigrateStats({ allRepos, allReposLoaded, migrateHistory }) {
       )}
 
       {/* Migrate history */}
-      <div className="glass rounded-[1.5rem] p-6">
-        <h2 className="text-xs font-semibold text-[#908fa0] uppercase tracking-widest mb-4 flex items-center gap-2">
+      <div className="glass rounded-[1.5rem]" style={{ padding: '1.5rem' }}>
+        <h2 className="text-xs font-semibold text-[#908fa0] uppercase tracking-widest flex items-center gap-2" style={{ marginBottom: '1rem' }}>
           <span className="material-symbols-outlined text-[#ddb7ff] text-base">history</span>
           Historial de migraciones a pnpm
         </h2>
@@ -426,20 +426,20 @@ export default function StatsPage() {
   ]
 
   return (
-    <main className="flex-1 w-full px-6 py-8" style={{ maxWidth: '1400px', marginLeft: 'auto', marginRight: 'auto' }}>
-      <div className="flex items-center justify-between mb-8 flex-wrap gap-4">
+    <main className="flex-1 w-full" style={{ maxWidth: '1400px', marginLeft: 'auto', marginRight: 'auto', padding: '2rem 1.5rem' }}>
+      <div className="flex items-center justify-between flex-wrap gap-4" style={{ marginBottom: '2rem' }}>
         <h1 className="text-2xl font-bold text-[#e4e1ed]">Estadísticas</h1>
 
         {/* Mode toggle */}
-        <div className="flex gap-1 p-1 rounded-xl" style={{ background: 'rgba(0,0,0,0.3)' }}>
+        <div className="flex gap-1 rounded-xl" style={{ padding: '0.25rem', background: 'rgba(0,0,0,0.3)' }}>
           {TABS.map(tab => (
             <button
               key={tab.id}
               onClick={() => setMode(tab.id)}
-              className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-200"
+              className="flex items-center gap-2 rounded-lg text-sm font-semibold transition-all duration-200"
               style={mode === tab.id
-                ? { background: 'rgba(192,193,255,0.15)', color: tab.id === 'migrate' ? '#ddb7ff' : '#c0c1ff', border: '1px solid rgba(192,193,255,0.3)' }
-                : { background: 'transparent', color: '#908fa0', border: '1px solid transparent' }
+                ? { padding: '0.5rem 1rem', background: 'rgba(192,193,255,0.15)', color: tab.id === 'migrate' ? '#ddb7ff' : '#c0c1ff', border: '1px solid rgba(192,193,255,0.3)' }
+                : { padding: '0.5rem 1rem', background: 'transparent', color: '#908fa0', border: '1px solid transparent' }
               }
             >
               <span className="material-symbols-outlined text-base">{tab.icon}</span>

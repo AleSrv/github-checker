@@ -19,14 +19,14 @@ export default function Navbar() {
 
   return (
     <nav className="sticky top-0 z-50 glass-strong border-b border-white/5">
-      <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between gap-4">
+      <div className="max-w-6xl mx-auto h-16 flex items-center justify-between gap-4" style={{ paddingLeft: '1.5rem', paddingRight: '1.5rem' }}>
         {/* Logo */}
         <button
           onClick={() => navigate('/')}
           className="flex items-center gap-2 flex-shrink-0"
         >
           <span className="material-symbols-outlined filled text-[#c0c1ff] text-2xl">security</span>
-          <span className="font-bold text-[#e4e1ed] hidden sm:block">Vuln Checker</span>
+          <span className="font-bold text-[#e4e1ed] hidden sm:block">GitHub Vuln Checker</span>
         </button>
 
         {/* Nav links */}
@@ -37,12 +37,14 @@ export default function Navbar() {
               <button
                 key={path}
                 onClick={() => navigate(path)}
-                className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium transition-all duration-200"
+                className="flex items-center gap-2 rounded-xl text-sm font-medium transition-all duration-200"
                 style={active ? {
+                  padding: '0.5rem 1rem',
                   background: 'rgba(192,193,255,0.15)',
                   color: '#c0c1ff',
                   border: '1px solid rgba(192,193,255,0.3)',
                 } : {
+                  padding: '0.5rem 1rem',
                   color: '#908fa0',
                   border: '1px solid transparent',
                 }}
@@ -69,7 +71,8 @@ export default function Navbar() {
           )}
           <button
             onClick={handleLogout}
-            className="flex items-center gap-1 px-3 py-2 rounded-xl text-sm text-[#908fa0] hover:text-[#f28b82] hover:bg-white/5 transition-all duration-200"
+            className="flex items-center gap-1 rounded-xl text-sm text-[#908fa0] hover:text-[#f28b82] hover:bg-white/5 transition-all duration-200"
+            style={{ padding: '0.5rem 0.75rem' }}
             title="Cerrar sesión"
           >
             <span className="material-symbols-outlined text-base">logout</span>
