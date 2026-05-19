@@ -60,7 +60,8 @@ export default function LandingPage() {
       {/* ── HERO ───────────────────────────────────────────── */}
       <section className="w-full px-6 pt-24 flex flex-col items-center" style={{ paddingBottom: '7rem' }}>
         <div
-          className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full text-xs font-semibold uppercase tracking-widest mb-8"
+          className="inline-flex items-center gap-2 rounded-full text-xs font-semibold uppercase tracking-widest"
+          style={{ padding: '0.6rem 1.5rem', marginBottom: '2rem' }}
           style={{ background: 'rgba(192,193,255,0.1)', border: '1px solid rgba(192,193,255,0.3)', color: '#c0c1ff' }}
         >
           <span className="w-2 h-2 rounded-full bg-[#c0c1ff] pulse-dot" />
